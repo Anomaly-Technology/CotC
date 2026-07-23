@@ -13,6 +13,9 @@
   /* ---------- App shell ---------- */
   .app { display: flex; min-height: 100vh; }
   .sidebar { display: none; }
+  #backToTop { position: fixed; bottom: 24px; right: 24px; width: 44px; height: 44px; border-radius: 50%; border: 1px solid #cfcfd1; background: #1f1f21; color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,.18); opacity: 0; visibility: hidden; transform: translateY(8px); transition: opacity .2s, visibility .2s, transform .2s; z-index: 60; }
+  #backToTop.show { opacity: 1; visibility: visible; transform: translateY(0); }
+  #backToTop:hover { background: #000; }
   .sidebar h1 { font-size: 12px; letter-spacing: .6px; text-transform: uppercase; color: #999; padding: 0 20px 4px; }
   .sidebar .sub { font-size: 11px; color: #b0b0b0; padding: 0 20px 16px; }
   .nav-group { margin-top: 12px; }
@@ -535,6 +538,15 @@ document.addEventListener('click', e=>{
   const el=e.target.closest('[data-go]'); if(el){ e.preventDefault(); show(el.dataset.go); }
 });
 document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeBio(); });
+
+/* ---------- back to top ---------- */
+const topBtn = document.createElement('button');
+topBtn.id='backToTop'; topBtn.setAttribute('aria-label','Scroll to top');
+topBtn.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>';
+document.body.appendChild(topBtn);
+topBtn.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
+window.addEventListener('scroll', ()=> topBtn.classList.toggle('show', window.scrollY>300), {passive:true});
+
 show('home');
 </script>
 </body>
