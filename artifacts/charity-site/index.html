@@ -21,8 +21,8 @@
   .nav-item:hover { background: #ececed; color: #222; }
   .nav-item.active { background: #ddd; color: #111; font-weight: bold; border-left: 3px solid #888; padding-left: 29px; }
 
-  .stage { flex: 1; display: flex; justify-content: center; }
-  .browser { width: 100%; background: #fff; overflow: hidden; }
+  .stage { flex: 1; min-width: 0; display: flex; justify-content: center; }
+  .browser { width: 100%; min-width: 0; background: #fff; overflow: hidden; }
   .chrome { display: none; }
   #backToTop { position: fixed; bottom: 24px; right: 24px; width: 44px; height: 44px; border-radius: 50%; border: 1px solid #cfcfd1; background: #1f1f21; color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,.18); opacity: 0; visibility: hidden; transform: translateY(8px); transition: opacity .2s, visibility .2s, transform .2s; z-index: 60; }
   #backToTop.show { opacity: 1; visibility: visible; transform: translateY(0); }
@@ -208,6 +208,7 @@
   .note { font-size: 11px; color: #a06a2c; background: #f8f1e6; border: 1px solid #ecd9bf; border-radius: 3px; padding: 3px 9px; display: inline-block; vertical-align: middle; margin-left: 8px; }
   a.jump { cursor: pointer; }
 
+
   /* footer */
   footer.site { background: #1c1c1f; padding: 48px 40px 28px; }
   .footmap { display: grid; grid-template-columns: 1.8fr 1fr 1fr 1.1fr 0.9fr; gap: 30px; }
@@ -223,6 +224,44 @@
   .footbar a { cursor: pointer; }
   .footbar a:hover { color: #fff; }
   .fine { font-size: 12px; color: #6a6a70; align-self: center; }
+  /* ---------- Responsive / mobile ---------- */
+  @media (max-width: 900px) {
+    .g4 { grid-template-columns: 1fr 1fr; }
+    .g3 { grid-template-columns: 1fr 1fr; }
+    .feature { grid-template-columns: 1fr; gap: 28px; }
+    .hero-overlay[style] { flex-direction: column; justify-content: center !important; gap: 24px !important; padding: 32px 24px; }
+  }
+  @media (max-width: 700px) {
+    header.site { flex-wrap: wrap; padding: 14px 18px; gap: 14px; }
+    nav.site { order: 3; flex-basis: 100%; flex-wrap: wrap; gap: 6px 18px; justify-content: flex-start; }
+    nav.site button { font-size: 12px; }
+    .lang { margin-left: auto; }
+    .dropdown { position: fixed; left: 12px; right: 12px; top: auto; min-width: 0; max-height: 60vh; overflow-y: auto; }
+    .band { padding: 44px 20px; }
+    .band h2 { font-size: 24px; }
+    .hero { height: auto; min-height: 340px; }
+    .hero.short { height: auto; min-height: 220px; }
+    .hero-overlay { position: relative; inset: auto; padding: 44px 20px; min-height: inherit; }
+    .hero-img { z-index: 0; }
+    .hero-box h1 { font-size: 30px; }
+    .hero.short .hero-box h1 { font-size: 26px; }
+    .hero-box p { font-size: 15px; }
+    .donate-widget { width: 100%; max-width: 420px; }
+    .g2, .g3, .g4 { grid-template-columns: 1fr; }
+    .stats { grid-template-columns: 1fr; gap: 22px; }
+    .stat b { font-size: 36px; }
+    .frow { grid-template-columns: 1fr; }
+    .footmap { grid-template-columns: 1fr; gap: 22px; }
+    .footmap a, .footbar { word-break: break-word; }
+    .footbar { grid-template-columns: 1fr; gap: 18px; }
+    .row { flex-wrap: wrap; }
+    .row .img { width: 100%; height: 120px; }
+    .modal-card { flex-direction: column; max-width: 400px; }
+    .modal-photo { width: 100%; height: 180px; }
+    .crumbs { padding: 12px 18px; }
+    .sorter .fill { font-size: 16px; }
+    #backToTop { bottom: 16px; right: 16px; width: 40px; height: 40px; }
+  }
 </style>
 </head>
 <body>
