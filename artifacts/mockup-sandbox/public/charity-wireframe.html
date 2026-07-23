@@ -281,7 +281,7 @@
       <header class="site">
         <div class="logo">LOGO</div>
         <nav class="site" id="topnav"></nav>
-        <div class="lang"><span class="on">EN</span><span>ES</span><span>CN</span></div>
+        <div class="lang"><button class="lang-btn"><span id="langCur">EN</span><span class="caret">▾</span></button><div class="lang-menu"><span class="on">EN</span><span>ES</span><span>CN</span></div></div>
       </header>
       <div class="crumbs" id="crumbs"></div>
       <div id="screens"></div>
@@ -558,6 +558,7 @@ function show(id){ const s=SCREENS[id]; if(!s) return;
   document.querySelectorAll('.nav-item').forEach(e=>e.classList.toggle('active', e.dataset.go===id));
   document.querySelectorAll('#topnav button').forEach(e=>e.classList.toggle('active', e.dataset.go===s.tab));
   renderCrumbs(id);
+  topnav.classList.remove('open');
   document.getElementById('url').textContent='childrenofthecity.org'+(s.url==='/'?'':s.url);
   window.scrollTo(0,0);
 }
@@ -577,6 +578,21 @@ document.addEventListener('click', e=>{
   const el=e.target.closest('[data-go]'); if(el){ e.preventDefault(); show(el.dataset.go); }
 });
 document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeBio(); });
+
+/* ---------- language selector ---------- */
+const langEl = document.querySelector('.lang');
+langEl.addEventListener('click', e=>{
+  const s = e.target.closest('.lang-menu span');
+  if(s){ langEl.querySelectorAll('.lang-menu span').forEach(x=>x.classList.toggle('on', x===s)); document.getElementById('langCur').textContent = s.textContent; langEl.classList.remove('open'); return; }
+  langEl.classList.toggle('open');
+});
+
+/* ---------- mobile menu ---------- */
+const menuBtn = document.createElement('button');
+menuBtn.className='menu-toggle'; menuBtn.setAttribute('aria-label','Menu');
+menuBtn.innerHTML='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>';
+document.querySelector('header.site').appendChild(menuBtn);
+menuBtn.addEventListener('click', ()=> topnav.classList.toggle('open'));
 
 /* ---------- back to top ---------- */
 const topBtn = document.createElement('button');
