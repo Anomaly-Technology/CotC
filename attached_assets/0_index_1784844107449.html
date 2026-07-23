@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Children of the City — Site Wireframe</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, Helvetica, sans-serif; background: #e4e4e6; color: #333; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  h1,h2,h3,h4 { line-height: 1.2; color: #1e1e1e; }
+  p { color: #565660; }
+
+  /* ---------- App shell ---------- */
+  .app { display: flex; min-height: 100vh; }
+  .sidebar { width: 240px; flex: none; background: #f6f6f7; border-right: 1px solid #d6d6d8; padding: 20px 0; position: sticky; top: 0; align-self: flex-start; height: 100vh; overflow-y: auto; }
+  .sidebar h1 { font-size: 12px; letter-spacing: .6px; text-transform: uppercase; color: #999; padding: 0 20px 4px; }
+  .sidebar .sub { font-size: 11px; color: #b0b0b0; padding: 0 20px 16px; }
+  .nav-group { margin-top: 12px; }
+  .nav-group .label { font-size: 10px; text-transform: uppercase; letter-spacing: .6px; color: #a0a0a0; padding: 6px 20px; font-weight: bold; }
+  .nav-item { display: block; width: 100%; text-align: left; background: none; border: none; cursor: pointer; font-family: inherit; font-size: 13px; color: #57575c; padding: 7px 20px 7px 32px; }
+  .nav-item:hover { background: #ececed; color: #222; }
+  .nav-item.active { background: #ddd; color: #111; font-weight: bold; border-left: 3px solid #888; padding-left: 29px; }
+
+  .stage { flex: 1; padding: 28px; display: flex; justify-content: center; }
+  .browser { width: 100%; max-width: 1120px; background: #fff; border: 1px solid #cfcfd1; border-radius: 7px; overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,.10); align-self: flex-start; }
+  .chrome { background: #e4e4e6; border-bottom: 1px solid #d0d0d2; padding: 9px 14px; display: flex; align-items: center; gap: 8px; }
+  .dot { width: 11px; height: 11px; border-radius: 50%; background: #c4c4c6; }
+  .urlbar { flex: 1; background: #f4f4f5; border: 1px solid #d4d4d6; border-radius: 12px; font-size: 11px; color: #999; padding: 4px 12px; margin-left: 8px; }
+
+  /* ---------- Site header ---------- */
+  header.site { border-bottom: 1px solid #ececec; padding: 18px 40px; display: flex; align-items: center; gap: 30px; background: #fff; position: relative; z-index: 5; }
+  .logo { width: 44px; height: 44px; border: 1.5px solid #bdbdbd; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 8px; color: #a0a0a0; text-align: center; flex: none; letter-spacing: .5px; }
+  nav.site { display: flex; gap: 26px; flex: 1; }
+  nav.site button { background: none; border: none; font-family: inherit; font-size: 13px; letter-spacing: .6px; text-transform: uppercase; color: #666; cursor: pointer; padding: 4px 0; }
+  nav.site button:hover { color: #111; }
+  nav.site button.active { color: #111; border-bottom: 2px solid #222; }
+  .lang { display: flex; gap: 4px; align-items: center; font-size: 11px; }
+  .lang span { border: 1px solid #ccc; border-radius: 3px; padding: 3px 7px; color: #999; }
+  .lang span.on { background: #262629; color: #fff; border-color: #262629; }
+
+  /* ---------- Nav dropdowns ---------- */
+  nav.site .navitem { position: relative; display: flex; align-items: center; }
+  nav.site .navitem > button { display: inline-flex; align-items: center; gap: 6px; }
+  .caret { font-size: 9px; color: #b0b0b4; }
+  .dropdown { position: absolute; top: 100%; left: -14px; background: #fff; border: 1px solid #e6e6e8; border-radius: 5px; box-shadow: 0 10px 28px rgba(0,0,0,.12); min-width: 216px; padding: 7px 0; display: none; z-index: 30; }
+  nav.site .navitem:hover .dropdown { display: block; }
+  .dropdown a { display: block; padding: 9px 20px; font-size: 13px; color: #55555c; cursor: pointer; text-transform: none; letter-spacing: 0; text-decoration: none; }
+  .dropdown a:hover { background: #f4f4f5; color: #111; }
+  .dropdown a.indent { padding-left: 36px; font-size: 12px; color: #85858c; }
+  .dropdown a.indent::before { content: "└ "; color: #c4c4c8; }
+
+  /* ---------- Screens ---------- */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* ---------- Bands ---------- */
+  .band { padding: 66px 40px; }
+  .band.grey { background: #f4f4f5; }
+  .band.dark { background: #262629; }
+  .band.dark h2, .band.dark h3 { color: #fff; }
+  .band.dark p { color: #c4c4c8; }
+  .wrap { max-width: 1000px; margin: 0 auto; }
+  .wrap.center { text-align: center; }
+  .center { text-align: center; }
+
+  .eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: 1.4px; color: #9a9aa0; font-weight: bold; margin-bottom: 12px; }
+  .eyebrow.light { color: #b8b8be; }
+  .band h2 { font-size: 30px; margin-bottom: 14px; }
+  .band h3 { font-size: 20px; margin-bottom: 8px; }
+  .lead { font-size: 16px; max-width: 640px; }
+  .wrap.center .lead { margin: 0 auto; }
+
+  /* ---------- Image placeholder ---------- */
+  .img { background: #dcdcde; border: 1px solid #d2d2d4; border-radius: 4px; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #a9a9af; gap: 8px; }
+  .img .ic { opacity: .8; }
+  .img span { font-size: 11px; text-transform: uppercase; letter-spacing: .6px; }
+
+  /* ---------- Hero ---------- */
+  .hero { position: relative; height: 440px; background: #d3d3d6; overflow: hidden; }
+  .hero.short { height: 280px; }
+  .hero-img { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #b2b2b8; gap: 8px; }
+  .hero-img span { font-size: 11px; text-transform: uppercase; letter-spacing: .6px; }
+  .hero-overlay { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(22,22,24,.62) 0%, rgba(22,22,24,.30) 55%, rgba(22,22,24,.12) 100%); display: flex; align-items: center; padding: 0 56px; }
+  .hero-overlay.center { justify-content: center; text-align: center; background: linear-gradient(180deg, rgba(22,22,24,.30), rgba(22,22,24,.48)); }
+  .hero-box { max-width: 560px; }
+  .hero-box.center { max-width: 720px; }
+  .hero-box h1 { font-size: 44px; color: #fff; margin-bottom: 16px; }
+  .hero.short .hero-box h1 { font-size: 34px; }
+  .hero-box p { font-size: 17px; color: #ececec; margin-bottom: 22px; }
+
+  /* ---------- Donate widget (in hero) ---------- */
+  .donate-widget { background: #fff; border-radius: 8px; box-shadow: 0 18px 44px rgba(0,0,0,.32); width: 350px; flex: none; padding: 26px; }
+  .dw-head { font-size: 17px; font-weight: bold; color: #1e1e1e; margin-bottom: 16px; }
+  .dw-toggle { display: flex; background: #f0f0f1; border-radius: 6px; padding: 4px; margin-bottom: 18px; }
+  .dw-toggle span { flex: 1; text-align: center; font-size: 13px; color: #808088; padding: 9px; border-radius: 4px; cursor: pointer; }
+  .dw-toggle span.on { background: #fff; color: #1e1e1e; font-weight: bold; box-shadow: 0 1px 3px rgba(0,0,0,.14); }
+  .dw-amounts { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 16px; }
+  .dw-amounts span { text-align: center; font-size: 14px; color: #44444a; border: 1px solid #dcdcde; border-radius: 5px; padding: 12px 0; cursor: pointer; }
+  .dw-amounts span.on { border-color: #262629; background: #262629; color: #fff; font-weight: bold; }
+  .dw-field { display: flex; align-items: center; gap: 8px; border: 1px solid #dcdcde; border-radius: 5px; padding: 12px 14px; margin-bottom: 16px; color: #b0b0b4; font-size: 14px; }
+  .dw-field .cur { color: #55555c; font-weight: bold; }
+  .dw-btn { background: #262629; color: #fff; text-align: center; padding: 15px; border-radius: 6px; font-size: 14px; font-weight: bold; letter-spacing: .4px; cursor: pointer; }
+  .dw-btn b { font-style: italic; }
+  .dw-secure { text-align: center; font-size: 11px; color: #9a9aa0; margin-top: 13px; letter-spacing: .3px; }
+
+  /* ---------- Breadcrumbs ---------- */
+  .crumbs { display: none; background: #fff; border-bottom: 1px solid #ececec; padding: 13px 40px; font-size: 12px; }
+  .crumbs.show { display: block; }
+  .crumbs a { color: #808088; text-decoration: none; cursor: pointer; }
+  .crumbs a:hover { color: #111; }
+  .crumbs .sep { color: #c8c8cc; margin: 0 9px; }
+  .crumbs .cur { color: #333; font-weight: bold; }
+
+  /* ---------- Back button ---------- */
+  .backbtn { display: inline-block; font-size: 12px; color: #808088; text-decoration: none; margin-bottom: 20px; cursor: pointer; letter-spacing: .3px; }
+  .backbtn:hover { color: #111; }
+
+  /* ---------- Bio modal ---------- */
+  .headshot { cursor: pointer; }
+  .headshot .img { transition: opacity .15s; }
+  .headshot:hover .img { opacity: .82; }
+  .headshot .viewbio { font-size: 11px; color: #9a9aa0; margin-top: 4px; }
+  .modal { position: fixed; inset: 0; background: rgba(20,20,22,.58); display: none; align-items: center; justify-content: center; z-index: 100; padding: 20px; }
+  .modal.open { display: flex; }
+  .modal-card { background: #fff; border-radius: 8px; max-width: 540px; width: 100%; overflow: hidden; position: relative; display: flex; box-shadow: 0 24px 60px rgba(0,0,0,.35); }
+  .modal-photo { width: 210px; flex: none; background: #dcdcde; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #a9a9af; gap: 8px; }
+  .modal-photo span { font-size: 11px; text-transform: uppercase; letter-spacing: .6px; }
+  .modal-body { padding: 30px 30px 32px; }
+  .modal-body h3 { font-size: 21px; margin-bottom: 4px; }
+  .modal-body .mrole { font-size: 13px; color: #999; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 16px; }
+  .modal-body p { font-size: 14px; }
+  .modal-x { position: absolute; top: 8px; right: 14px; background: none; border: none; font-size: 26px; color: #b0b0b4; cursor: pointer; line-height: 1; }
+  .modal-x:hover { color: #111; }
+
+  /* ---------- Buttons ---------- */
+  .btnrow { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btnrow.center { justify-content: center; }
+  .btn { display: inline-block; font-size: 12px; letter-spacing: .8px; padding: 12px 24px; border-radius: 2px; cursor: pointer; text-transform: uppercase; border: 1.5px solid #262629; color: #262629; background: #fff; font-family: inherit; text-decoration: none; }
+  .btn:hover { opacity: .85; }
+  .btn.solid { background: #262629; color: #fff; }
+  .btn.onhero { background: #fff; color: #1e1e1e; border-color: #fff; }
+  .btn.ghost { background: transparent; color: #fff; border-color: #fff; }
+  .btn.sm { padding: 8px 16px; font-size: 11px; }
+
+  /* ---------- Feature row ---------- */
+  .feature { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+  .feature + .feature { margin-top: 56px; }
+
+  /* ---------- Cards ---------- */
+  .grid { display: grid; gap: 22px; }
+  .g2 { grid-template-columns: 1fr 1fr; }
+  .g3 { grid-template-columns: repeat(3,1fr); }
+  .g4 { grid-template-columns: repeat(4,1fr); }
+  .pcard { background: #fff; border: 1px solid #e6e6e8; border-radius: 5px; overflow: hidden; }
+  .band.grey .pcard { border-color: #e0e0e2; }
+  .pcard .img { border-radius: 0; border-left: none; border-right: none; border-top: none; }
+  .pcard-b { padding: 20px; }
+  .pcard-b h3 { font-size: 17px; margin-bottom: 8px; }
+  .pcard-b p { font-size: 13px; }
+  .pcard-b .btnrow { margin-top: 14px; }
+
+  /* stats */
+  .stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 30px; margin-top: 28px; }
+  .stat { text-align: center; }
+  .stat b { display: block; font-size: 46px; color: #fff; font-weight: bold; }
+  .band.grey .stat b, .band:not(.dark) .stat b { color: #333; }
+  .stat span { font-size: 12px; color: #b8b8be; text-transform: uppercase; letter-spacing: .8px; }
+  .band:not(.dark) .stat span { color: #8a8a90; }
+
+  /* team headshots */
+  .headshot { text-align: center; }
+  .headshot .img { aspect-ratio: 1/1; border-radius: 50%; margin-bottom: 12px; }
+  .headshot .n { font-size: 14px; color: #222; font-weight: bold; }
+  .headshot .r { font-size: 12px; color: #999; }
+
+  /* testimonial */
+  .tcard { background: #fff; border: 1px solid #e6e6e8; border-radius: 5px; padding: 26px; }
+  .tcard p { font-size: 14px; color: #55555c; margin-bottom: 18px; font-style: italic; }
+  .tperson { display: flex; align-items: center; gap: 12px; }
+  .avatar { width: 44px; height: 44px; border-radius: 50%; background: #dcdcde; border: 1px solid #d2d2d4; flex: none; }
+  .tperson .n { font-size: 13px; font-weight: bold; color: #333; }
+  .tperson .r { font-size: 12px; color: #999; }
+
+  /* list rows */
+  .row { display: flex; align-items: center; gap: 20px; background: #fff; border: 1px solid #e6e6e8; border-radius: 5px; padding: 18px 20px; margin-bottom: 14px; }
+  .row .img { width: 120px; height: 80px; flex: none; }
+  .row .grow { flex: 1; }
+  .row h3 { font-size: 16px; margin-bottom: 4px; }
+  .row .meta { font-size: 12px; color: #999; }
+
+  /* form */
+  .formcard { background: #fff; border: 1px solid #e6e6e8; border-radius: 5px; padding: 30px; max-width: 620px; margin: 0 auto; }
+  .frow { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .field { margin-bottom: 16px; }
+  .field label { display: block; font-size: 11px; color: #8a8a90; text-transform: uppercase; letter-spacing: .6px; margin-bottom: 6px; }
+  .field .inp { height: 40px; background: #f5f5f6; border: 1px solid #dcdcde; border-radius: 4px; }
+  .field .inp.area { height: 96px; }
+
+  /* audience sorter */
+  .sorter { background: #fff; border: 1px solid #e2e2e4; border-radius: 6px; padding: 30px; max-width: 720px; margin: 0 auto; text-align: center; }
+  .sorter .fill { display: inline-flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; font-size: 20px; color: #333; }
+  .pill { display: inline-block; background: #f0f0f1; border: 1px solid #d6d6d8; border-radius: 4px; padding: 6px 30px 6px 14px; color: #777; font-size: 15px; position: relative; }
+  .pill::after { content: "▾"; position: absolute; right: 10px; color: #aaa; }
+
+  .note { font-size: 11px; color: #a06a2c; background: #f8f1e6; border: 1px solid #ecd9bf; border-radius: 3px; padding: 3px 9px; display: inline-block; vertical-align: middle; margin-left: 8px; }
+  a.jump { cursor: pointer; }
+
+  /* footer */
+  footer.site { background: #1c1c1f; padding: 48px 40px 28px; }
+  .footmap { display: grid; grid-template-columns: 1.8fr 1fr 1fr 1.1fr 0.9fr; gap: 30px; }
+  .footmap .fbrand .logo { border-color: #555; color: #888; margin-bottom: 14px; }
+  .footmap .fbrand p { color: #85858c; font-size: 12px; margin-bottom: 16px; }
+  .fhead { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .8px; color: #e8e8ea; font-weight: bold; margin-bottom: 14px; text-decoration: none; cursor: pointer; }
+  .fhead:hover { color: #fff; }
+  .footmap a:not(.fhead) { display: block; font-size: 13px; color: #9a9aa2; text-decoration: none; margin: 9px 0; cursor: pointer; }
+  .footmap a:not(.fhead):hover { color: #fff; }
+  .footbar { display: grid; grid-template-columns: 1.3fr 1fr 1.4fr; gap: 30px; border-top: 1px solid #333; margin-top: 38px; padding-top: 26px; }
+  .footbar h4 { font-size: 11px; text-transform: uppercase; letter-spacing: .8px; color: #8a8a90; margin-bottom: 12px; }
+  .footbar a, .footbar p { display: block; font-size: 13px; color: #9a9aa2; text-decoration: none; margin: 7px 0; }
+  .footbar a { cursor: pointer; }
+  .footbar a:hover { color: #fff; }
+  .fine { font-size: 12px; color: #6a6a70; align-self: center; }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <h1>Children of the City</h1>
+    <div class="sub">Site wireframe — v2</div>
+    <div id="sitemap"></div>
+  </aside>
+
+  <div class="stage">
+    <div class="browser">
+      <div class="chrome">
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        <div class="urlbar" id="url">childrenofthecity.org</div>
+      </div>
+      <header class="site">
+        <div class="logo">LOGO</div>
+        <nav class="site" id="topnav"></nav>
+        <div class="lang"><span class="on">EN</span><span>ES</span><span>CN</span></div>
+      </header>
+      <div class="crumbs" id="crumbs"></div>
+      <div id="screens"></div>
+      <footer class="site">
+        <div class="footmap">
+          <div class="fbrand">
+            <div class="logo">LOGO</div>
+            <p>Closing the wealth gap in the Sunset Park community since 1982.</p>
+            <a class="btn onhero sm" data-go="donate">Donate</a>
+          </div>
+          <div class="fcol" id="foot-about"></div>
+          <div class="fcol" id="foot-programs"></div>
+          <div class="fcol" id="foot-getinvolved"></div>
+          <div class="fcol" id="foot-donate"></div>
+        </div>
+        <div class="footbar">
+          <div><h4>Contact</h4><p>Address placeholder</p><p>Email placeholder</p><p>Phone placeholder</p></div>
+          <div><h4>Follow</h4><a>Instagram</a><a>Facebook</a></div>
+          <div class="fine">Available in EN / ES / CN&nbsp;&nbsp;·&nbsp;&nbsp;Fine print placeholder&nbsp;&nbsp;·&nbsp;&nbsp;© Children of the City</div>
+        </div>
+      </footer>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------- placeholder copy ---------- */
+const L1 = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.';
+const L2 = L1 + ' Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.';
+const L3 = L2 + ' Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.';
+
+const ICON = '<svg class="ic" width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="4.5" width="18" height="15" rx="1.5"/><circle cx="8.5" cy="10" r="1.9"/><path d="M4 18l5.5-5 4 3.5 3-2.5 4.5 4"/></svg>';
+
+/* ---------- builders ---------- */
+function img(h,label,style){ return `<div class="img" style="height:${h}px;${style||''}">${ICON}${label?`<span>${label}</span>`:''}</div>`; }
+function eyebrow(t,light){ return `<div class="eyebrow${light?' light':''}">${t}</div>`; }
+function jump(id,label,cls){ return `<a class="btn ${cls||''}" data-go="${id}">${label}</a>`; }
+function band(inner, cls){ return `<section class="band ${cls||''}"><div class="wrap${cls&&cls.indexOf('center')>-1?' center':''}">${inner}</div></section>`; }
+
+function hero(ey,title,sub,ctas){ return `<section class="hero"><div class="hero-img">${ICON}<span>Hero image</span></div><div class="hero-overlay"><div class="hero-box">${ey?eyebrow(ey,true):''}<h1>${title}</h1>${sub?`<p>${sub}</p>`:''}${ctas?`<div class="btnrow">${ctas}</div>`:''}</div></div></section>`; }
+function phero(title,sub){ return `<section class="hero short"><div class="hero-img">${ICON}<span>Header image</span></div><div class="hero-overlay center"><div class="hero-box center"><h1>${title}</h1>${sub?`<p>${sub}</p>`:''}</div></div></section>`; }
+
+function feature(ey,title,body,ctas,imgLabel,flip,cls){
+  const im = `<div>${img(300,imgLabel||'Image')}</div>`;
+  const tx = `<div>${ey?eyebrow(ey):''}<h2>${title}</h2><p>${body}</p>${ctas?`<div class="btnrow" style="margin-top:20px">${ctas}</div>`:''}</div>`;
+  return `<section class="band ${cls||''}"><div class="wrap"><div class="feature">${flip?tx+im:im+tx}</div></div></section>`;
+}
+function statband(ey,title,stats){ return `<section class="band dark"><div class="wrap center">${ey?eyebrow(ey,true):''}${title?`<h2>${title}</h2>`:''}<div class="stats">${stats.map(([n,l])=>`<div class="stat"><b>${n}</b><span>${l}</span></div>`).join('')}</div></div></section>`; }
+function ctaband(title,ctas){ return `<section class="band dark"><div class="wrap center"><h2>${title}</h2><div class="btnrow center" style="margin-top:8px">${ctas}</div></div></section>`; }
+function nextaction(links){ return band(`${eyebrow('Next best action')}<div class="btnrow center">${links}</div>`, 'grey center'); }
+function testimonials(cls){ return band(`${eyebrow('Voices from our community')}<h2 style="margin-bottom:30px">Meet the community</h2><div class="grid g3">${Array(3).fill(0).map(()=>`<div class="tcard"><p>"${L2}"</p><div class="tperson"><div class="avatar"></div><div><div class="n">Community member</div><div class="r">Program participant</div></div></div></div>`).join('')}</div>`, cls||''); }
+
+function programPage(name, tagline, opts){
+  opts = opts || {};
+  const overviewNote = opts.overviewNote ? `<span class="note">${opts.overviewNote}</span>` : '';
+  let out = phero(name, tagline);
+  out += feature('Program overview', `About ${name} ${overviewNote}`, L3, jump('prog-enroll','Enroll now','solid sm'), 'Program photo', false, '');
+  out += band(`${eyebrow('Who it\'s for')}<h2>Eligibility requirements</h2><p class="lead">${L2}</p>`, 'grey');
+  if(opts.mode !== 'access'){
+    out += band(`${eyebrow('The details')}<h2 style="margin-bottom:26px">Enrollment details</h2><div class="grid g3">
+      <div class="pcard"><div class="pcard-b"><div class="eyebrow">Location</div><p>${L1}</p></div></div>
+      <div class="pcard"><div class="pcard-b"><div class="eyebrow">Cost</div><p>${L1}</p></div></div>
+      <div class="pcard"><div class="pcard-b"><div class="eyebrow">Dates</div><p>${L1}</p></div></div></div>`, '');
+  } else {
+    out += band(`${eyebrow('The details')}<h2>Access resources</h2><p class="lead" style="margin-bottom:20px">${L2}</p><div class="btnrow"><a class="btn solid" href="https://www.dropbox.com" target="_blank" rel="noopener">Access resources</a></div>`, '');
+  }
+  if(opts.form){
+    const grey = (opts.mode==='access') ? 'grey' : 'grey';
+    out += band(`${eyebrow('Sign up')}<h2 style="margin-bottom:24px">${name} enrollment form</h2>
+      <div class="formcard"><div class="frow"><div class="field"><label>Student name</label><div class="inp"></div></div><div class="field"><label>Grade</label><div class="inp"></div></div></div>
+      <div class="field"><label>Parent / guardian email</label><div class="inp"></div></div>
+      <div class="field"><label>Notes</label><div class="inp area"></div></div>
+      <div class="btnrow"><span class="btn solid">Submit enrollment</span></div></div>`, grey);
+  }
+  out += ctaband('Want to help this program thrive?', jump('gi-volunteer','Volunteer with us','onhero'));
+  out += testimonials(opts.form ? '' : 'grey');
+  return out;
+}
+
+function donateWidget(){ return `<div class="donate-widget">
+  <div class="dw-head">Make a donation</div>
+  <div class="dw-toggle"><span class="on">One-time</span><span>Monthly</span></div>
+  <div class="dw-amounts"><span>$25</span><span class="on">$50</span><span>$100</span><span>$250</span><span>$500</span><span>Other</span></div>
+  <div class="dw-field"><span class="cur">$</span><span>Enter amount</span></div>
+  <div class="dw-btn">Donate with <b>PayPal</b></div>
+  <div class="dw-secure">Secure checkout &nbsp;·&nbsp; PayPal</div>
+</div>`; }
+
+function donateHero(){ return `<section class="hero"><div class="hero-img">${ICON}<span>Hero image</span></div>
+  <div class="hero-overlay" style="justify-content:space-between;gap:44px">
+    <div class="hero-box" style="max-width:460px">${eyebrow('Support our work',true)}<h1>Every gift makes a difference</h1><p>Your donation opens doors for kids in Sunset Park.</p></div>
+    ${donateWidget()}
+  </div></section>`; }
+
+/* ---------- SCREENS ---------- */
+const SCREENS = {
+  'home': { tab:'home', url:'/', title:'Home', html:
+    hero('Our mission','Every child deserves the chance to succeed.','Closing the wealth gap in the Sunset Park community since 1982.',
+      jump('donate','Donate','onhero')+jump('getinvolved','Get involved','ghost'))
+    + feature('Support our work','Your gift makes a difference', L2, jump('donate','Donate now','solid sm'), 'PayPal / donate module', false, '')
+    + band(`${eyebrow('Find your path')}<h2>How would you like to help?</h2><p class="lead" style="margin:0 auto 26px">Guide visitors to the right next step.<span class="note">exploratory — mad-libs audience sorter</span></p>
+        <div class="sorter"><div class="fill">I am a <span class="pill">parent</span> looking to <span class="pill">enroll my child</span><span class="btn solid sm" style="margin-left:6px">Go</span></div></div>`, 'grey center')
+    + feature('The challenge','There is a wealth gap in the Sunset Park community', L2, '', 'Community photo', true, '')
+    + statband('Our impact','CotC provides access to education resources for kids and families',[['XX','Kids served'],['XX','Went to college'],['XX','Workshops held']])
+    + band(`${eyebrow('Get involved')}<h2 style="margin-bottom:28px">Three ways to make an impact</h2><div class="grid g3">
+        <div class="pcard">${img(150,'Photo')}<div class="pcard-b"><h3>Donate</h3><p>${L1}</p><div class="btnrow">${jump('donate','Donate','solid sm')}</div></div></div>
+        <div class="pcard">${img(150,'Photo')}<div class="pcard-b"><h3>Volunteer</h3><p>${L1}</p><div class="btnrow">${jump('gi-volunteer','Volunteer','sm')}</div></div></div>
+        <div class="pcard">${img(150,'Photo')}<div class="pcard-b"><h3>Enroll</h3><p>${L1}</p><div class="btnrow">${jump('prog-enroll','Enroll','sm')}</div></div></div>
+      </div>`, 'grey') },
+
+  'about': { tab:'about', url:'/about', title:'About', html:
+    phero('About Children of the City','Restating who we are and the community we serve.')
+    + feature('Our mission','Closing the wealth gap, one child at a time', L2, '', 'Mission photo', false, '')
+    + feature('Who we help','Serving the families of Sunset Park', L2, '', 'Community photo', true, 'grey')
+    + band(`${eyebrow('How we work')}<h2>A high-level look at our approach</h2><p class="lead">${L2}</p><div class="btnrow" style="margin-top:20px">${jump('programs','Learn more about our programs','solid')}</div>`, '') },
+
+  'about-story': { tab:'about', url:'/about/our-story', title:'Our Story', html:
+    phero('Our Story')
+    + feature('Where it began','A note from our founder', L3, '', 'Founder portrait', false, '')
+    + nextaction(jump('getinvolved','Join us','solid')+jump('about-board','Meet the team','')) },
+
+  'about-board': { tab:'about', url:'/about/board-team', title:'Board / Team', html:
+    phero('Board & Team')
+    + band(`${eyebrow('The people behind the work')}<h2>Meet the team</h2><p class="lead">${L1}</p>`, '')
+    + band(`<div class="grid g4">${Array(8).fill(0).map(()=>`<div class="headshot" data-bio="1">${img(150,'Headshot')}<div class="n">Full Name</div><div class="r">Title / Role</div><div class="viewbio">View bio →</div></div>`).join('')}</div>`, 'grey')
+    + ctaband('Want to get involved?', jump('getinvolved','Join us','onhero')+jump('about-partners','Meet our partners','ghost')) },
+
+  'about-schools': { tab:'about', url:'/about/schools', title:'Participating Schools', html:
+    phero('Participating Schools')
+    + band(`${eyebrow('Where we work')}<h2>Our schools</h2><p class="lead">${L1}</p>`, '')
+    + band(`<div class="grid g2">${Array(6).fill(0).map(()=>`<div class="row"><div class="img">${ICON}</div><div class="grow"><h3>School name</h3><div class="meta">Contact info placeholder</div></div></div>`).join('')}</div>`, 'grey')
+    + nextaction(jump('getinvolved','Join us','solid')) },
+
+  'about-partners': { tab:'about', url:'/about/partners', title:'Partners', html:
+    phero('Our Partners')
+    + band(`${eyebrow('Stronger together')}<h2>Our partners</h2><p class="lead">${L1}</p>`, '')
+    + band(`<div class="grid g4">${Array(8).fill(0).map(()=>img(100,'Logo')).join('')}</div>`, 'grey')
+    + nextaction(jump('getinvolved','Join us','solid')) },
+
+  'programs': { tab:'programs', url:'/programs', title:'Programs', html:
+    phero('Our Programs','Education, mentorship, and support for kids and families.')
+    + band(`${eyebrow('What we offer')}<h2>Programs built around the community</h2><p class="lead" style="margin:0 auto">${L2}</p>`, 'center')
+    + band(`<div class="grid g2">${[
+        ['Create Success','After school and summer programs for grades 1-12','prog-create'],
+        ['College Bound','College prep for high school students','prog-college'],
+        ['Future Safe','Food and supplies for households in the community','prog-future'],
+        ['SMASH','Workshops, mentorship, and advocacy for parents and caretakers','prog-smash']
+      ].map(p=>`<div class="pcard">${img(190,'Program image')}<div class="pcard-b"><h3>${p[0]}</h3><p>${p[1]}</p><div class="btnrow">${jump(p[2],'Learn more','sm')}</div></div></div>`).join('')}</div>`, 'grey') },
+
+  'prog-create': { tab:'programs', url:'/programs/create-success', title:'Create Success', html: programPage('Create Success','After school and summer programs for grades 1-12', {form:true}) },
+  'prog-college': { tab:'programs', url:'/programs/college-bound', title:'College Bound', html: programPage('College Bound','College prep for high school students', {form:false}) },
+  'prog-future': { tab:'programs', url:'/programs/future-safe', title:'Future Safe', html: programPage('Future Safe','Food and supplies for households in the community', {mode:'access', form:false}) },
+  'prog-smash': { tab:'programs', url:'/programs/smash', title:'SMASH', html: programPage('SMASH','Workshops, mentorship, and advocacy for parents and caretakers', {form:true}) },
+
+  'prog-enroll': { tab:'programs', url:'/programs/enroll', title:'Enroll', html:
+    phero('Enroll','Learn more about our programs to enroll.')
+    + band(`${eyebrow('Get started')}<h2>Choose a program</h2><p class="lead" style="margin:0 auto">${L1}</p>`, 'center')
+    + band(`<div class="grid g4">${['Create Success','College Bound','Future Safe','SMASH'].map((n,i)=>`<div class="pcard">${img(140,'Image')}<div class="pcard-b"><h3 style="font-size:15px">${n}</h3><div class="btnrow">${jump(['prog-create','prog-college','prog-future','prog-smash'][i],'Learn more','sm')}</div></div></div>`).join('')}</div>`, 'grey') },
+
+  'getinvolved': { tab:'getinvolved', url:'/get-involved', title:'Get Involved', html:
+    hero('Get involved','Join the movement','Volunteer your time or bring an event to life.', jump('gi-volunteer','Volunteer','onhero')+jump('gi-events','See events','ghost'))
+    + band(`${eyebrow('Ways to help')}<h2 style="margin-bottom:28px">Find the right fit</h2><div class="grid g2">
+        <div class="pcard">${img(200,'Volunteer photo')}<div class="pcard-b"><h3>Volunteer</h3><p>${L2}</p><div class="btnrow">${jump('gi-volunteer','Learn more','solid sm')}</div></div></div>
+        <div class="pcard">${img(200,'Events photo')}<div class="pcard-b"><h3>Events</h3><p>${L2}</p><div class="btnrow">${jump('gi-events','Learn more','solid sm')}</div></div></div>
+      </div>`, '') },
+
+  'gi-volunteer': { tab:'getinvolved', url:'/get-involved/volunteer', title:'Volunteer', html:
+    phero('Volunteer','Give your time. Change a life.')
+    + feature('Why volunteer','Be part of the work', L2, '', 'Volunteer photo', false, '')
+    + band(`${eyebrow('Opportunities')}<h2 style="margin-bottom:26px">Volunteer roles</h2><div class="grid g3">${Array(3).fill(0).map(()=>`<div class="pcard"><div class="pcard-b"><h3>Role title</h3><p>${L2}</p></div></div>`).join('')}</div>`, 'grey')
+    + testimonials('')
+    + band(`${eyebrow('Ready to start')}<h2 style="margin-bottom:24px;text-align:center">Apply to volunteer</h2>
+        <div class="formcard"><div class="frow"><div class="field"><label>Name</label><div class="inp"></div></div><div class="field"><label>Email</label><div class="inp"></div></div></div>
+        <div class="field"><label>How would you like to help?</label><div class="inp area"></div></div>
+        <div class="btnrow"><span class="btn solid">Submit</span></div></div>`, 'grey') },
+
+  'gi-events': { tab:'getinvolved', url:'/get-involved/events', title:'Events', html:
+    phero('Events','Bringing the community together.')
+    + band(`<div class="grid g2">
+        <div class="pcard">${img(190,'Photo')}<div class="pcard-b"><h3>Upcoming events</h3><p>${L1}</p><div class="btnrow">${jump('gi-upcoming','See what\'s coming','solid sm')}</div></div></div>
+        <div class="pcard">${img(190,'Photo')}<div class="pcard-b"><h3>Past events</h3><p>${L1}</p><div class="btnrow">${jump('gi-past','View the gallery','sm')}</div></div></div>
+      </div>`, '') },
+
+  'gi-upcoming': { tab:'getinvolved', url:'/get-involved/events/upcoming', title:'Upcoming Events', html:
+    phero('Upcoming Events')
+    + band(`<a class="backbtn" data-go="gi-events">← Back to Events</a>${eyebrow('Mark your calendar')}<h2 style="margin-bottom:26px">What\'s coming up</h2>${Array(3).fill(0).map(()=>`<div class="row"><div class="img">${ICON}</div><div class="grow"><h3>Event name / type</h3><div class="meta">Date placeholder · Location</div></div><div class="btnrow"><span class="btn sm solid">Give</span><span class="btn sm">Volunteer</span></div></div>`).join('')}`, '') },
+
+  'gi-past': { tab:'getinvolved', url:'/get-involved/events/past', title:'Past Events', html:
+    phero('Past Events')
+    + band(`${eyebrow('Looking back')}<h2 style="margin-bottom:26px">Past events gallery</h2><div class="grid g3">${Array(6).fill(0).map(()=>`<div class="pcard">${img(170,'Event photo')}<div class="pcard-b"><h3 style="font-size:16px">Event name / type</h3><p>Success metrics</p></div></div>`).join('')}</div>`, 'grey')
+    + statband('With gratitude','Thank you to our partners & donors',[['XX','Events held'],['XX','Attendees'],['XX','Volunteers']]) },
+
+  'donate': { tab:'donate', url:'/donate', title:'Donate', html:
+    donateHero()
+    + feature('More ways to give','Mail a check, give stock, or set up employer matching', L2, '', 'Community photo', false, '')
+    + statband('Reason to believe','When you give, XX% of your donation goes to XX',[['XX','Kids served'],['XX','Kids went to college'],['XX','Workshops held']])
+    + band(`${eyebrow('Social proof')}<h2 style="margin-bottom:26px;text-align:center">Thanks to our partners & donors</h2><div class="grid g4">${Array(4).fill(0).map(()=>img(90,'Logo')).join('')}</div>`, 'grey')
+    + testimonials('') },
+};
+
+/* ---------- nav config ---------- */
+const TABS = [
+  { id:'home', label:'Home' }, { id:'about', label:'About' }, { id:'programs', label:'Programs' },
+  { id:'getinvolved', label:'Get Involved' }, { id:'donate', label:'Donate' },
+];
+const MAP = [
+  { label:'Home', items:[['home','Overview']] },
+  { label:'About', items:[['about','Overview'],['about-story','Our Story'],['about-board','Board / Team'],['about-schools','Participating schools'],['about-partners','Partners']] },
+  { label:'Programs', items:[['programs','Overview'],['prog-create','Create Success'],['prog-college','College Bound'],['prog-future','Future Safe'],['prog-smash','SMASH'],['prog-enroll','Enroll']] },
+  { label:'Get Involved', items:[['getinvolved','Overview'],['gi-volunteer','Volunteer'],['gi-events','Events'],['gi-upcoming','Upcoming Events'],['gi-past','Past Events']] },
+  { label:'Donate', items:[['donate','Overview']] },
+];
+/* dropdown menus under each top-nav tab (landing = the tab itself, so omitted) */
+const DROPDOWNS = {
+  about: [['about-story','Our Story'],['about-board','Board / Team'],['about-schools','Participating Schools'],['about-partners','Partners']],
+  programs: [['prog-create','Create Success'],['prog-college','College Bound'],['prog-future','Future Safe'],['prog-smash','SMASH'],['prog-enroll','Enroll']],
+  getinvolved: [['gi-volunteer','Volunteer'],['gi-events','Events'],['gi-upcoming','Upcoming Events',1],['gi-past','Past Events',1]],
+};
+const LABELS = {}; MAP.forEach(g=>g.items.forEach(([id,label])=>{ LABELS[id]=label; }));
+const TAB_PAGES = {}; Object.entries(SCREENS).forEach(([id,s])=>{ (TAB_PAGES[s.tab]=TAB_PAGES[s.tab]||[]).push([id, LABELS[id]||id]); });
+
+/* ---------- render ---------- */
+const screensEl = document.getElementById('screens');
+Object.entries(SCREENS).forEach(([id,s])=>{ const d=document.createElement('div'); d.className='screen'; d.id='screen-'+id; d.innerHTML=s.html; screensEl.appendChild(d); });
+
+const topnav = document.getElementById('topnav');
+TABS.forEach(t=>{
+  const item = document.createElement('div'); item.className='navitem';
+  const b = document.createElement('button'); b.dataset.go=t.id;
+  const dd = DROPDOWNS[t.id];
+  b.innerHTML = t.label + (dd ? ' <span class="caret">▾</span>' : '');
+  item.appendChild(b);
+  if(dd){ const panel=document.createElement('div'); panel.className='dropdown'; panel.innerHTML=dd.map(([id,label,ind])=>`<a data-go="${id}" class="${ind?'indent':''}">${label}</a>`).join(''); item.appendChild(panel); }
+  topnav.appendChild(item);
+});
+
+const sitemap = document.getElementById('sitemap');
+MAP.forEach(g=>{ const grp=document.createElement('div'); grp.className='nav-group'; grp.innerHTML=`<div class="label">${g.label}</div>`; g.items.forEach(([id,label])=>{ const btn=document.createElement('button'); btn.className='nav-item'; btn.dataset.go=id; btn.textContent=label; grp.appendChild(btn); }); sitemap.appendChild(grp); });
+
+/* ---------- footer sitemap ---------- */
+const FOOTER = [
+  ['about','About', DROPDOWNS.about],
+  ['programs','Programs', DROPDOWNS.programs],
+  ['getinvolved','Get Involved', DROPDOWNS.getinvolved],
+  ['donate','Donate', []],
+];
+FOOTER.forEach(([tab,label,subs])=>{
+  const col=document.getElementById('foot-'+tab); if(!col) return;
+  let h=`<a class="fhead" data-go="${tab}">${label}</a>`;
+  subs.forEach(([id,l])=>{ h+=`<a data-go="${id}">${l}</a>`; });
+  col.innerHTML=h;
+});
+
+/* ---------- breadcrumbs ---------- */
+const PARENT = {
+  about:'home', programs:'home', getinvolved:'home', donate:'home',
+  'about-story':'about','about-board':'about','about-schools':'about','about-partners':'about',
+  'prog-create':'programs','prog-college':'programs','prog-future':'programs','prog-smash':'programs','prog-enroll':'programs',
+  'gi-volunteer':'getinvolved','gi-events':'getinvolved','gi-upcoming':'gi-events','gi-past':'gi-events',
+};
+function trail(id){ const t=[id]; let p=PARENT[id]; while(p){ t.unshift(p); p=PARENT[p]; } return t; }
+function renderCrumbs(id){
+  const el=document.getElementById('crumbs'); const t=trail(id);
+  if(t.length<=1){ el.className='crumbs'; el.innerHTML=''; return; }
+  el.className='crumbs show';
+  el.innerHTML='<div class="wrap">'+t.map((sid,i)=> i===t.length-1
+    ? `<span class="cur">${SCREENS[sid].title}</span>`
+    : `<a data-go="${sid}">${SCREENS[sid].title}</a><span class="sep">/</span>`).join('')+'</div>';
+}
+
+function show(id){ const s=SCREENS[id]; if(!s) return;
+  document.querySelectorAll('.screen').forEach(e=>e.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(e=>e.classList.toggle('active', e.dataset.go===id));
+  document.querySelectorAll('#topnav button').forEach(e=>e.classList.toggle('active', e.dataset.go===s.tab));
+  renderCrumbs(id);
+  document.getElementById('url').textContent='childrenofthecity.org'+(s.url==='/'?'':s.url);
+  window.scrollTo(0,0);
+}
+
+/* ---------- bio modal ---------- */
+const bioModal = document.createElement('div');
+bioModal.className='modal'; bioModal.id='bioModal';
+bioModal.innerHTML = `<div class="modal-card"><button class="modal-x" aria-label="Close">×</button>
+  <div class="modal-photo">${ICON}<span>Photo</span></div>
+  <div class="modal-body"><h3>Full Name</h3><div class="mrole">Title / Role</div><p>${L3}</p></div></div>`;
+document.body.appendChild(bioModal);
+function closeBio(){ bioModal.classList.remove('open'); }
+
+document.addEventListener('click', e=>{
+  if(e.target.closest('.modal-x') || e.target===bioModal){ closeBio(); return; }
+  if(e.target.closest('.headshot')){ bioModal.classList.add('open'); return; }
+  const el=e.target.closest('[data-go]'); if(el){ e.preventDefault(); show(el.dataset.go); }
+});
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeBio(); });
+show('home');
+</script>
+</body>
+</html>
