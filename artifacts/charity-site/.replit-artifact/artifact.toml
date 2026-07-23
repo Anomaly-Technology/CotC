@@ -1,0 +1,27 @@
+kind = "web"
+previewPath = "/"
+title = "Children of the City — Wireframe"
+version = "1.0.0"
+id = "artifacts/charity-site"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 21123
+
+[services.development]
+run = "pnpm --filter @workspace/charity-site run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/charity-site", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/charity-site/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "21123"
+BASE_PATH = "/"
