@@ -13,3 +13,5 @@ export * from './contentMap';
 export * from './contentUpdate';
 export * from './contentUpdateEntries';
 export * from './healthStatus';
+export * from './uploadUrlRequest';
+export * from './uploadUrlResponse';

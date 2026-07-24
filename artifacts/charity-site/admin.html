@@ -49,6 +49,12 @@
   .field.changed input, .field.changed textarea{ border-color:#e0a93e; background:#fffdf5; }
   .reset{ background:none; border:0; color:var(--mut); font-size:12px; cursor:pointer; padding:2px 0; text-decoration:underline; display:none; }
   .field.changed .reset{ display:inline; }
+  /* image fields */
+  .imgrow{ display:flex; align-items:center; gap:14px; }
+  .thumb{ width:110px; height:74px; flex:none; border:1px solid var(--line); border-radius:8px; background:#eef1f5 center/cover no-repeat; display:flex; align-items:center; justify-content:center; color:var(--mut); font-size:11px; }
+  .imgbtns{ display:flex; flex-direction:column; gap:6px; }
+  .btn.sm{ padding:7px 14px; font-size:13px; }
+  .upmsg{ font-size:12px; color:var(--mut); min-height:14px; }
   @media (max-width:760px){ .layout{ flex-direction:column; } nav.pages{ position:static; flex-direction:row; flex-wrap:wrap; } }
 </style>
 </head>
@@ -105,6 +111,60 @@
     saveState.textContent = n ? (n + ' unsaved change' + (n>1?'s':'')) : 'All changes saved';
   }
 
+  function buildImageField(wrap, f){
+    wrap.innerHTML = '<label>'+esc(f.label)+'</label>'
+      + '<div class="imgrow">'
+      +   '<div class="thumb">No image yet</div>'
+      +   '<div class="imgbtns">'
+      +     '<button type="button" class="btn ghost sm up">Upload image</button>'
+      +     '<button type="button" class="btn ghost sm rm" style="display:none">Remove image</button>'
+      +     '<div class="upmsg"></div>'
+      +   '</div>'
+      + '</div>'
+      + '<input type="file" accept="image/*" style="display:none">';
+    var thumb = wrap.querySelector('.thumb');
+    var upBtn = wrap.querySelector('.up');
+    var rmBtn = wrap.querySelector('.rm');
+    var msg = wrap.querySelector('.upmsg');
+    var fileInp = wrap.querySelector('input[type=file]');
+
+    function pending(){ return (f.key in dirty) ? dirty[f.key] : ((f.key in overrides) ? overrides[f.key] : ''); }
+    function paint(){
+      var url = pending();
+      if(url){ thumb.style.backgroundImage = 'url("'+url.replace(/"/g,'%22')+'")'; thumb.textContent=''; rmBtn.style.display='inline-block'; }
+      else { thumb.style.backgroundImage=''; thumb.textContent='No image yet'; rmBtn.style.display='none'; }
+      wrap.className = 'field' + ((f.key in dirty) ? ' changed' : '');
+      setSaveUI();
+    }
+    upBtn.addEventListener('click', function(){ fileInp.click(); });
+    fileInp.addEventListener('change', function(){
+      var file = fileInp.files && fileInp.files[0];
+      if(!file) return;
+      if(file.size > 10 * 1024 * 1024){ msg.textContent = 'Image is too large (max 10 MB).'; return; }
+      msg.textContent = 'Uploading…'; upBtn.disabled = true;
+      api('/storage/uploads/request-url', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ name:file.name, size:file.size, contentType:file.type }) })
+        .then(function(r){ if(!r.ok) throw new Error('auth'); return r.json(); })
+        .then(function(j){
+          return fetch(j.uploadURL, { method:'PUT', body:file, headers:{ 'Content-Type': file.type } })
+            .then(function(r2){ if(!r2.ok) throw new Error('upload'); return j.objectPath; });
+        })
+        .then(function(objectPath){
+          dirty[f.key] = '/api/storage' + objectPath;
+          msg.textContent = 'Uploaded — press Save changes to publish.';
+          paint();
+        })
+        .catch(function(){ msg.textContent = 'Upload failed — are you still signed in?'; })
+        .then(function(){ upBtn.disabled = false; fileInp.value=''; });
+    });
+    rmBtn.addEventListener('click', function(){
+      var hadOverride = (f.key in overrides) && overrides[f.key] !== '';
+      if(hadOverride){ dirty[f.key] = ''; } else { delete dirty[f.key]; }
+      msg.textContent = hadOverride ? 'Will go back to the placeholder after you save.' : '';
+      paint();
+    });
+    paint();
+  }
+
   function buildDash(){
     var pages = [];
     FIELDS.forEach(function(f){ if(pages.indexOf(f.page)<0) pages.push(f.page); });
@@ -122,6 +182,11 @@
       FIELDS.filter(function(f){ return f.page===p; }).forEach(function(f){
         var wrap = document.createElement('div');
         wrap.className='field'; wrap.dataset.key=f.key;
+        if(f.kind === 'img'){
+          buildImageField(wrap, f);
+          g.appendChild(wrap);
+          return;
+        }
         var v = currentValue(f);
         wrap.innerHTML = '<label>'+esc(f.label)+'</label>'
           + (f.ml ? '<textarea></textarea>' : '<input type="text">')

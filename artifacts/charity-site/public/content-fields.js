@@ -8,6 +8,7 @@
 
   const F = [];
   function add(page, key, label, sel, def, ml) { F.push({ page, key, label, sel, def, ml: !!ml }); }
+  function addImg(page, key, label, sel) { F.push({ page, key, label, sel, def: '', kind: 'img' }); }
 
   /* ---- Home ---- */
   add('Home', 'home.hero.title', 'Main headline', '#screen-home section:nth-of-type(1) .hero-box h1', 'Every child deserves the chance to succeed.');
@@ -94,6 +95,65 @@
   add('Footer', 'footer.contact.address', 'Address', 'footer.site .footbar div:nth-child(1) p:nth-of-type(1)', 'Address placeholder');
   add('Footer', 'footer.contact.email', 'Email', 'footer.site .footbar div:nth-child(1) p:nth-of-type(2)', 'Email placeholder');
   add('Footer', 'footer.contact.phone', 'Phone', 'footer.site .footbar div:nth-child(1) p:nth-of-type(3)', 'Phone placeholder');
+
+  /* ================= IMAGES ================= */
+
+  /* ---- Home ---- */
+  addImg('Home', 'home.hero.img', 'Hero image', '#screen-home section:nth-of-type(1) .hero-img');
+  addImg('Home', 'home.give.img', '"Support our work" photo', '#screen-home section:nth-of-type(2) .img');
+  addImg('Home', 'home.challenge.img', '"The challenge" photo', '#screen-home section:nth-of-type(4) .img');
+  addImg('Home', 'home.ways.donate.img', 'Donate card photo', '#screen-home section:nth-of-type(6) .pcard:nth-child(1) .img');
+  addImg('Home', 'home.ways.volunteer.img', 'Volunteer card photo', '#screen-home section:nth-of-type(6) .pcard:nth-child(2) .img');
+  addImg('Home', 'home.ways.enroll.img', 'Enroll card photo', '#screen-home section:nth-of-type(6) .pcard:nth-child(3) .img');
+
+  /* ---- About ---- */
+  addImg('About', 'about.hero.img', 'About page header image', '#screen-about section:nth-of-type(1) .hero-img');
+  addImg('About', 'about.mission.img', '"Our mission" photo', '#screen-about section:nth-of-type(2) .img');
+  addImg('About', 'about.who.img', '"Who we help" photo', '#screen-about section:nth-of-type(3) .img');
+  addImg('About', 'story.hero.img', 'Our Story header image', '#screen-about-story section:nth-of-type(1) .hero-img');
+  addImg('About', 'story.founder.img', 'Founder portrait', '#screen-about-story section:nth-of-type(2) .img');
+  addImg('About', 'board.hero.img', 'Board & Team header image', '#screen-about-board section:nth-of-type(1) .hero-img');
+  for (var h = 1; h <= 8; h++) {
+    addImg('About', 'board.headshot' + h, 'Team headshot ' + h, '#screen-about-board section:nth-of-type(3) .headshot:nth-child(' + h + ') .img');
+  }
+  addImg('About', 'schools.hero.img', 'Schools header image', '#screen-about-schools section:nth-of-type(1) .hero-img');
+  addImg('About', 'partners.hero.img', 'Partners header image', '#screen-about-partners section:nth-of-type(1) .hero-img');
+  for (var lg = 1; lg <= 8; lg++) {
+    addImg('About', 'partners.logo' + lg, 'Partner logo ' + lg, '#screen-about-partners section:nth-of-type(3) .grid > div:nth-child(' + lg + ')');
+  }
+
+  /* ---- Programs ---- */
+  addImg('Programs', 'programs.hero.img', 'Programs header image', '#screen-programs section:nth-of-type(1) .hero-img');
+  progs.forEach(function (p) {
+    var id = p[0], i = p[1], name = p[2];
+    addImg('Programs', id + '.card.img', name + ': card image',
+      '#screen-programs section:nth-of-type(3) .pcard:nth-child(' + i + ') .img, #screen-prog-enroll section:nth-of-type(3) .pcard:nth-child(' + i + ') .img');
+    addImg('Programs', id + '.hero.img', name + ': page header image', '#screen-' + id + ' section:nth-of-type(1) .hero-img');
+    addImg('Programs', id + '.photo', name + ': program photo', '#screen-' + id + ' section:nth-of-type(2) .img');
+  });
+  addImg('Programs', 'enroll.hero.img', 'Enroll page header image', '#screen-prog-enroll section:nth-of-type(1) .hero-img');
+
+  /* ---- Get Involved ---- */
+  addImg('Get Involved', 'gi.hero.img', 'Get Involved hero image', '#screen-getinvolved section:nth-of-type(1) .hero-img');
+  addImg('Get Involved', 'gi.volunteer.img', 'Volunteer card photo', '#screen-getinvolved section:nth-of-type(2) .pcard:nth-child(1) .img');
+  addImg('Get Involved', 'gi.events.img', 'Events card photo', '#screen-getinvolved section:nth-of-type(2) .pcard:nth-child(2) .img');
+  addImg('Get Involved', 'vol.hero.img', 'Volunteer header image', '#screen-gi-volunteer section:nth-of-type(1) .hero-img');
+  addImg('Get Involved', 'vol.why.img', '"Why volunteer" photo', '#screen-gi-volunteer section:nth-of-type(2) .img');
+  addImg('Get Involved', 'events.hero.img', 'Events header image', '#screen-gi-events section:nth-of-type(1) .hero-img');
+  addImg('Get Involved', 'events.upcoming.img', 'Upcoming events card photo', '#screen-gi-events section:nth-of-type(2) .pcard:nth-child(1) .img');
+  addImg('Get Involved', 'events.past.img', 'Past events card photo', '#screen-gi-events section:nth-of-type(2) .pcard:nth-child(2) .img');
+  addImg('Get Involved', 'upcoming.hero.img', 'Upcoming Events header image', '#screen-gi-upcoming section:nth-of-type(1) .hero-img');
+  addImg('Get Involved', 'past.hero.img', 'Past Events header image', '#screen-gi-past section:nth-of-type(1) .hero-img');
+  for (var ev = 1; ev <= 6; ev++) {
+    addImg('Get Involved', 'past.gallery' + ev, 'Past event photo ' + ev, '#screen-gi-past section:nth-of-type(2) .pcard:nth-child(' + ev + ') .img');
+  }
+
+  /* ---- Donate ---- */
+  addImg('Donate', 'donate.hero.img', 'Donate hero image', '#screen-donate section:nth-of-type(1) .hero-img');
+  addImg('Donate', 'donate.ways.img', '"More ways to give" photo', '#screen-donate section:nth-of-type(2) .img');
+  for (var dl = 1; dl <= 4; dl++) {
+    addImg('Donate', 'donate.logo' + dl, 'Partner / donor logo ' + dl, '#screen-donate section:nth-of-type(4) .grid > div:nth-child(' + dl + ')');
+  }
 
   window.CONTENT_FIELDS = F;
 })();

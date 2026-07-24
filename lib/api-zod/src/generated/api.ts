@@ -9,6 +9,58 @@ import * as zod from 'zod';
 
 
 /**
+ * @summary Request a presigned URL for file upload
+ */
+
+export const requestUploadUrlBodySizeMax = 10485760;
+
+export const requestUploadUrlBodyContentTypeRegExp = new RegExp('^image');
+
+
+export const RequestUploadUrlBody = zod.object({
+  "name": zod.string().min(1),
+  "size": zod.number().min(1).max(requestUploadUrlBodySizeMax),
+  "contentType": zod.string().regex(requestUploadUrlBodyContentTypeRegExp)
+})
+
+
+export const requestUploadUrlResponseMetadataSizeMax = 10485760;
+
+export const requestUploadUrlResponseMetadataContentTypeRegExp = new RegExp('^image');
+
+
+export const RequestUploadUrlResponse = zod.object({
+  "uploadURL": zod.string(),
+  "objectPath": zod.string(),
+  "metadata": zod.object({
+  "name": zod.string().min(1),
+  "size": zod.number().min(1).max(requestUploadUrlResponseMetadataSizeMax),
+  "contentType": zod.string().regex(requestUploadUrlResponseMetadataContentTypeRegExp)
+}).optional()
+})
+
+
+/**
+ * @summary Serve a public asset from PUBLIC_OBJECT_SEARCH_PATHS
+ */
+export const GetPublicObjectParams = zod.object({
+  "filePath": zod.coerce.string()
+})
+
+export const GetPublicObjectResponse = zod.unknown()
+
+
+/**
+ * @summary Serve an uploaded object
+ */
+export const GetStorageObjectParams = zod.object({
+  "objectPath": zod.coerce.string()
+})
+
+export const GetStorageObjectResponse = zod.unknown()
+
+
+/**
  * @summary Get all content overrides
  */
 export const GetContentResponse = zod.record(zod.string(), zod.string())

@@ -5,6 +5,24 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
+export interface UploadUrlRequest {
+  /** @minLength 1 */
+  name: string;
+  /**
+     * @minimum 1
+     * @maximum 10485760
+     */
+  size: number;
+  /** @pattern ^image/ */
+  contentType: string;
+}
+
+export interface UploadUrlResponse {
+  uploadURL: string;
+  objectPath: string;
+  metadata?: UploadUrlRequest;
+}
+
 export interface ContentMap {[key: string]: string}
 
 export type ContentUpdateEntries = {[key: string]: string};
