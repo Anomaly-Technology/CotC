@@ -1,0 +1,1 @@
+- [Content dashboard design](content-dashboard.md) — charity-site editable text uses a CSS-selector manifest (content-fields.js); changing screen section order breaks overrides.

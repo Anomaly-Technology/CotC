@@ -10,7 +10,94 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: content
+    description: Editable site content
+  - name: admin
+    description: Admin session
 paths:
+  /content:
+    get:
+      operationId: getContent
+      tags: [content]
+      summary: Get all content overrides
+      responses:
+        "200":
+          description: Content map
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContentMap"
+    put:
+      operationId: updateContent
+      tags: [content]
+      summary: Update content overrides (admin only)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContentUpdate"
+      responses:
+        "200":
+          description: Updated content map
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContentMap"
+        "401":
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiMessage"
+  /admin/login:
+    post:
+      operationId: adminLogin
+      tags: [admin]
+      summary: Log in with the admin password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdminCredentials"
+      responses:
+        "200":
+          description: Logged in
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminSession"
+        "401":
+          description: Wrong password
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiMessage"
+  /admin/logout:
+    post:
+      operationId: adminLogout
+      tags: [admin]
+      summary: Log out
+      responses:
+        "200":
+          description: Logged out
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiMessage"
+  /admin/session:
+    get:
+      operationId: adminSession
+      tags: [admin]
+      summary: Check current admin session
+      responses:
+        "200":
+          description: Session state
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminSession"
   /healthz:
     get:
       operationId: healthCheck
@@ -26,6 +113,37 @@ paths:
                 $ref: "#/components/schemas/HealthStatus"
 components:
   schemas:
+    ContentMap:
+      type: object
+      additionalProperties:
+        type: string
+    ContentUpdate:
+      type: object
+      required: [entries]
+      properties:
+        entries:
+          type: object
+          additionalProperties:
+            type: string
+    AdminCredentials:
+      type: object
+      required: [password]
+      properties:
+        password:
+          type: string
+          minLength: 1
+    AdminSession:
+      type: object
+      required: [authenticated]
+      properties:
+        authenticated:
+          type: boolean
+    ApiMessage:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
     HealthStatus:
       type: object
       properties:

@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Content Dashboard — Children of the City</title>
+<style>
+  :root{ --ink:#1c2430; --mut:#6b7686; --line:#e3e7ee; --bg:#f5f7fa; --acc:#1f5eff; --ok:#0d8a4f; --err:#c0392b; }
+  *{ box-sizing:border-box; margin:0; }
+  body{ font-family:system-ui,-apple-system,'Segoe UI',sans-serif; background:var(--bg); color:var(--ink); }
+
+  /* login */
+  .login-wrap{ min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; }
+  .login-card{ background:#fff; border:1px solid var(--line); border-radius:12px; padding:36px; width:100%; max-width:380px; box-shadow:0 8px 30px rgba(20,30,50,.08); }
+  .login-card h1{ font-size:20px; margin-bottom:6px; }
+  .login-card p{ color:var(--mut); font-size:14px; margin-bottom:22px; }
+  label{ display:block; font-size:13px; font-weight:600; margin-bottom:6px; }
+  input[type=password]{ width:100%; padding:11px 12px; border:1px solid var(--line); border-radius:8px; font-size:15px; }
+  input:focus, textarea:focus, .field-in input:focus{ outline:2px solid var(--acc); outline-offset:0; border-color:var(--acc); }
+  .btn{ display:inline-block; border:0; background:var(--acc); color:#fff; font-size:15px; font-weight:600; padding:11px 20px; border-radius:8px; cursor:pointer; }
+  .btn.full{ width:100%; margin-top:16px; }
+  .btn.ghost{ background:#fff; color:var(--ink); border:1px solid var(--line); font-weight:500; }
+  .btn:disabled{ opacity:.55; cursor:default; }
+  .msg{ font-size:13.5px; margin-top:12px; min-height:18px; }
+  .msg.err{ color:var(--err); } .msg.ok{ color:var(--ok); }
+
+  /* dashboard */
+  .dash{ display:none; }
+  .topbar{ position:sticky; top:0; z-index:5; background:#fff; border-bottom:1px solid var(--line); display:flex; align-items:center; gap:14px; padding:14px 22px; }
+  .topbar h1{ font-size:16px; }
+  .topbar .sub{ color:var(--mut); font-size:13px; }
+  .topbar .spacer{ flex:1; }
+  .savestate{ font-size:13px; color:var(--mut); }
+  .savestate.dirty{ color:#a86b00; font-weight:600; }
+  .savestate.ok{ color:var(--ok); font-weight:600; }
+  .layout{ display:flex; gap:26px; max-width:1060px; margin:0 auto; padding:26px 22px 80px; }
+  nav.pages{ position:sticky; top:78px; align-self:flex-start; min-width:160px; display:flex; flex-direction:column; gap:2px; }
+  nav.pages a{ text-decoration:none; color:var(--mut); font-size:14px; padding:8px 12px; border-radius:8px; }
+  nav.pages a.on{ background:#e8eeff; color:var(--acc); font-weight:600; }
+  main{ flex:1; min-width:0; }
+  .group{ background:#fff; border:1px solid var(--line); border-radius:12px; padding:24px 26px; margin-bottom:26px; scroll-margin-top:86px; }
+  .group h2{ font-size:17px; margin-bottom:4px; }
+  .group .hint{ color:var(--mut); font-size:13px; margin-bottom:18px; }
+  .field{ margin-bottom:18px; }
+  .field label{ font-size:13px; }
+  .field .def{ font-weight:400; color:var(--mut); }
+  .field input, .field textarea{ width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:8px; font-size:14.5px; font-family:inherit; background:#fff; }
+  .field textarea{ min-height:74px; resize:vertical; line-height:1.5; }
+  .field.changed input, .field.changed textarea{ border-color:#e0a93e; background:#fffdf5; }
+  .reset{ background:none; border:0; color:var(--mut); font-size:12px; cursor:pointer; padding:2px 0; text-decoration:underline; display:none; }
+  .field.changed .reset{ display:inline; }
+  @media (max-width:760px){ .layout{ flex-direction:column; } nav.pages{ position:static; flex-direction:row; flex-wrap:wrap; } }
+</style>
+</head>
+<body>
+
+<div class="login-wrap" id="loginView">
+  <form class="login-card" id="loginForm">
+    <h1>Content Dashboard</h1>
+    <p>Children of the City — edit your website text here.</p>
+    <label for="pw">Password</label>
+    <input type="password" id="pw" autocomplete="current-password" required>
+    <button class="btn full" type="submit">Sign in</button>
+    <div class="msg err" id="loginMsg"></div>
+  </form>
+</div>
+
+<div class="dash" id="dashView">
+  <div class="topbar">
+    <div><h1>Content Dashboard</h1><div class="sub">Edit text, then press Save. Changes go live right away.</div></div>
+    <div class="spacer"></div>
+    <span class="savestate" id="saveState">All changes saved</span>
+    <a class="btn ghost" href="/" target="_blank">View site</a>
+    <button class="btn" id="saveBtn" disabled>Save changes</button>
+    <button class="btn ghost" id="logoutBtn">Sign out</button>
+  </div>
+  <div class="layout">
+    <nav class="pages" id="pageNav"></nav>
+    <main id="groups"></main>
+  </div>
+</div>
+
+<script src="./content-fields.js"></script>
+<script>
+(function(){
+  var FIELDS = window.CONTENT_FIELDS || [];
+  var overrides = {};
+  var dirty = {};
+
+  var loginView = document.getElementById('loginView');
+  var dashView = document.getElementById('dashView');
+  var saveBtn = document.getElementById('saveBtn');
+  var saveState = document.getElementById('saveState');
+
+  function api(path, opts){ return fetch('/api' + path, Object.assign({ credentials:'same-origin' }, opts)); }
+
+  function esc(s){ var d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+
+  function currentValue(f){ return (f.key in overrides) ? overrides[f.key] : f.def; }
+
+  function setSaveUI(){
+    var n = Object.keys(dirty).length;
+    saveBtn.disabled = n === 0;
+    saveState.className = 'savestate' + (n ? ' dirty' : '');
+    saveState.textContent = n ? (n + ' unsaved change' + (n>1?'s':'')) : 'All changes saved';
+  }
+
+  function buildDash(){
+    var pages = [];
+    FIELDS.forEach(function(f){ if(pages.indexOf(f.page)<0) pages.push(f.page); });
+    var nav = document.getElementById('pageNav');
+    var main = document.getElementById('groups');
+    nav.innerHTML=''; main.innerHTML='';
+    pages.forEach(function(p, pi){
+      var a = document.createElement('a');
+      a.href = '#group-' + pi; a.textContent = p; if(pi===0) a.className='on';
+      a.addEventListener('click', function(){ nav.querySelectorAll('a').forEach(function(x){ x.className = x===a ? 'on' : ''; }); });
+      nav.appendChild(a);
+      var g = document.createElement('section');
+      g.className='group'; g.id='group-'+pi;
+      g.innerHTML = '<h2>'+esc(p)+'</h2><div class="hint">Text shown on the '+esc(p)+(p==='Footer'?' of every page':' page')+'.</div>';
+      FIELDS.filter(function(f){ return f.page===p; }).forEach(function(f){
+        var wrap = document.createElement('div');
+        wrap.className='field'; wrap.dataset.key=f.key;
+        var v = currentValue(f);
+        wrap.innerHTML = '<label>'+esc(f.label)+'</label>'
+          + (f.ml ? '<textarea></textarea>' : '<input type="text">')
+          + '<button type="button" class="reset">Reset to original</button>';
+        var inp = wrap.querySelector('input,textarea');
+        inp.value = v;
+        function refresh(){
+          var changed = inp.value !== currentValue(f);
+          if(changed) dirty[f.key] = inp.value; else delete dirty[f.key];
+          wrap.className = 'field' + (changed ? ' changed' : '');
+          setSaveUI();
+        }
+        inp.addEventListener('input', refresh);
+        wrap.querySelector('.reset').addEventListener('click', function(){ inp.value = f.def; if(f.def === currentValue(f)) { delete dirty[f.key]; } else { dirty[f.key] = f.def; } wrap.className='field'+(inp.value!==currentValue(f)?' changed':''); setSaveUI(); });
+        g.appendChild(wrap);
+      });
+      main.appendChild(g);
+    });
+    setSaveUI();
+  }
+
+  function showDash(){
+    api('/content').then(function(r){ return r.ok ? r.json() : {}; }).then(function(map){
+      overrides = map || {};
+      loginView.style.display='none';
+      dashView.style.display='block';
+      buildDash();
+    });
+  }
+
+  document.getElementById('loginForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    var msg = document.getElementById('loginMsg'); msg.textContent='';
+    api('/admin/login', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ password: document.getElementById('pw').value }) })
+      .then(function(r){ return r.json().then(function(j){ return { ok:r.ok, j:j }; }); })
+      .then(function(x){ if(x.ok){ showDash(); } else { msg.textContent = (x.j && x.j.error) || 'Login failed'; } })
+      .catch(function(){ msg.textContent='Could not reach the server.'; });
+  });
+
+  saveBtn.addEventListener('click', function(){
+    var entries = Object.assign({}, dirty);
+    saveBtn.disabled = true; saveState.textContent = 'Saving…'; saveState.className='savestate';
+    api('/content', { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ entries: entries }) })
+      .then(function(r){ if(!r.ok) throw new Error('save failed'); return r.json(); })
+      .then(function(map){
+        overrides = map || {}; dirty = {};
+        document.querySelectorAll('.field').forEach(function(w){ w.className='field'; });
+        setSaveUI();
+        saveState.className='savestate ok'; saveState.textContent='Saved ✓';
+        setTimeout(setSaveUI, 2500);
+      })
+      .catch(function(){
+        saveState.className='savestate dirty'; saveState.textContent='Save failed — are you still signed in?'; saveBtn.disabled=false;
+      });
+  });
+
+  document.getElementById('logoutBtn').addEventListener('click', function(){
+    api('/admin/logout', { method:'POST' }).then(function(){ location.reload(); });
+  });
+
+  api('/admin/session').then(function(r){ return r.json(); }).then(function(s){ if(s && s.authenticated) showDash(); }).catch(function(){});
+})();
+</script>
+</body>
+</html>

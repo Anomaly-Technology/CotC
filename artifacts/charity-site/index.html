@@ -319,6 +319,7 @@
   </div>
 </div>
 
+<script src="./content-fields.js"></script>
 <script>
 /* ---------- placeholder copy ---------- */
 const L1 = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.';
@@ -615,6 +616,21 @@ topBtn.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}
 window.addEventListener('scroll', ()=> topBtn.classList.toggle('show', window.scrollY>300), {passive:true});
 
 show('home');
+
+/* ---------- client-editable content (loaded from the content API) ---------- */
+(function(){
+  function applyContent(map){
+    (window.CONTENT_FIELDS||[]).forEach(function(f){
+      var v = map[f.key];
+      if(v == null || v === '' || v === f.def) return;
+      document.querySelectorAll(f.sel).forEach(function(el){ el.textContent = v; });
+    });
+  }
+  fetch('/api/content')
+    .then(function(r){ return r.ok ? r.json() : {}; })
+    .catch(function(){ return {}; })
+    .then(applyContent);
+})();
 </script>
 </body>
 </html>
