@@ -91,7 +91,7 @@
   add('Donate', 'donate.impact.title', 'Impact banner heading', '#screen-donate section:nth-of-type(3) h2', 'When you give, XX% of your donation goes to XX');
 
   /* ---- Footer ---- */
-  add('Footer', 'footer.blurb', 'Footer mission blurb', 'footer.site .fbrand p', 'Closing the wealth gap in the Sunset Park community since 1982.', 1);
+  add('Footer', 'footer.blurb', 'Footer mission blurb', 'footer.site .fbrand p', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.', 1);
   add('Footer', 'footer.contact.address', 'Address', 'footer.site .footbar div:nth-child(1) p:nth-of-type(1)', 'Address placeholder');
   add('Footer', 'footer.contact.email', 'Email', 'footer.site .footbar div:nth-child(1) p:nth-of-type(2)', 'Email placeholder');
   add('Footer', 'footer.contact.phone', 'Phone', 'footer.site .footbar div:nth-child(1) p:nth-of-type(3)', 'Phone placeholder');
