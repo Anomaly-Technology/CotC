@@ -213,6 +213,18 @@
   .pill { display: inline-block; background: #f0f0f1; border: 1px solid #d6d6d8; border-radius: 4px; padding: 6px 30px 6px 14px; color: #777; font-size: 15px; position: relative; }
   .pill::after { content: "▾"; position: absolute; right: 10px; color: #aaa; }
   .pill-sel { appearance: none; -webkit-appearance: none; background: #f0f0f1 url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="6"><path d="M0 0l5 6 5-6z" fill="%23aaa"/></svg>') no-repeat right 10px center; border: 1px solid #d6d6d8; border-radius: 4px; padding: 6px 30px 6px 14px; color: #555; font-size: inherit; font-family: inherit; cursor: pointer; }
+  /* programs accordion */
+  .prog-accordion { border-top: 1px solid var(--line); }
+  .prog-row { border-bottom: 1px solid var(--line); }
+  .prog-trigger { display: grid; grid-template-columns: 1fr auto 48px; align-items: center; gap: 24px; width: 100%; padding: 26px 0; background: none; border: none; cursor: pointer; text-align: left; transition: background .15s; }
+  .prog-trigger:hover { background: #f7f7f8; margin: 0 -24px; padding-left: 24px; padding-right: 24px; width: calc(100% + 48px); }
+  .prog-trigger h3 { font-size: clamp(22px, 3vw, 32px); font-weight: 700; color: var(--ink); margin: 0; letter-spacing: -.3px; }
+  .prog-tag { font-size: 13px; color: var(--mut); white-space: nowrap; }
+  .prog-icon { width: 36px; height: 36px; border: 1.5px solid var(--line); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex: none; margin-left: auto; transition: transform .25s, background .15s; font-size: 20px; color: var(--mut); line-height: 1; }
+  .prog-row.open .prog-icon { transform: rotate(45deg); background: var(--ink); color: #fff; border-color: var(--ink); }
+  .prog-panel { display: none; padding: 0 0 30px; }
+  .prog-row.open .prog-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+  @media(max-width:600px){ .prog-row.open .prog-panel{ grid-template-columns:1fr; } .prog-tag{ display:none; } }
   /* who-we-help inline stats */
   .mini-stats { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
   .mini-stat { display: flex; align-items: baseline; gap: 12px; }
@@ -496,12 +508,24 @@ const SCREENS = {
   'programs': { tab:'programs', url:'/programs', title:'Programs', html:
     phero('Our Programs', L1)
     + band(`<h2>Our programs</h2><p class="lead" style="margin:0 auto">${L2}</p>`, 'center')
-    + band(`<div class="grid g2">${[
-        ['Create Success', L1,'prog-create'],
-        ['College Bound', L1,'prog-college'],
-        ['Future Safe', L1,'prog-future'],
-        ['SMASH', L1,'prog-smash']
-      ].map(p=>`<div class="pcard">${img(190,'Program image')}<div class="pcard-b"><h3>${p[0]}</h3><p>${p[1]}</p><div class="btnrow">${jump(p[2],'Learn more','sm')}</div></div></div>`).join('')}</div>`, 'grey') },
+    + band(`<div class="prog-accordion">${[
+        ['Create Success','After-school &amp; summer','prog-create'],
+        ['College Bound','College prep','prog-college'],
+        ['Future Safe','Community support','prog-future'],
+        ['SMASH','Family &amp; caretaker','prog-smash']
+      ].map(([name,tag,id])=>`
+        <div class="prog-row">
+          <button class="prog-trigger" aria-expanded="false">
+            <h3>${name}</h3>
+            <span class="prog-tag">${tag}</span>
+            <span class="prog-icon">+</span>
+          </button>
+          <div class="prog-panel" role="region">
+            <div>${img(260,'Program photo')}</div>
+            <div><p>${L2}</p><div class="btnrow" style="margin-top:16px">${jump(id,'Learn more','solid sm')}</div></div>
+          </div>
+        </div>`).join('')}
+      </div>`, '') },
 
   'prog-create': { tab:'programs', url:'/programs/create-success', title:'Create Success', html: programPage('Create Success', L1, {form:true}) },
   'prog-college': { tab:'programs', url:'/programs/college-bound', title:'College Bound', html: programPage('College Bound', L1, {form:false}) },
@@ -663,6 +687,16 @@ function populateSortWhat(){
   const opts = SORT_OPTS[who.value] || SORT_OPTS.family;
   what.innerHTML = opts.map(([v,l]) => `<option value="${v}">${l}</option>`).join('');
 }
+/* ---------- programs accordion ---------- */
+document.querySelectorAll('.prog-trigger').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const row = btn.closest('.prog-row');
+    const isOpen = row.classList.contains('open');
+    document.querySelectorAll('.prog-row.open').forEach(r=>{ r.classList.remove('open'); r.querySelector('.prog-trigger').setAttribute('aria-expanded','false'); });
+    if(!isOpen){ row.classList.add('open'); btn.setAttribute('aria-expanded','true'); }
+  });
+});
+
 document.getElementById('sort-who')?.addEventListener('change', populateSortWhat);
 document.getElementById('sort-go')?.addEventListener('click', ()=>{
   const id = document.getElementById('sort-what')?.value;
