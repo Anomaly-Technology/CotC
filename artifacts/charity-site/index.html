@@ -293,7 +293,7 @@
         <div class="urlbar" id="url">childrenofthecity.org</div>
       </div>
       <header class="site">
-        <div class="logo">LOGO</div>
+        <div class="logo" id="siteLogo" style="cursor:pointer" title="Home">LOGO</div>
         <nav class="site" id="topnav"></nav>
         <div class="lang"><button class="lang-btn"><span id="langCur">EN</span><span class="caret">▾</span></button><div class="lang-menu"><span class="on">EN</span><span>ES</span><span>CN</span></div></div>
       </header>
@@ -499,11 +499,10 @@ const SCREENS = {
 
 /* ---------- nav config ---------- */
 const TABS = [
-  { id:'home', label:'Home' }, { id:'about', label:'About' }, { id:'programs', label:'Programs' },
+  { id:'about', label:'About' }, { id:'programs', label:'Programs' },
   { id:'getinvolved', label:'Get Involved' }, { id:'donate', label:'Donate' },
 ];
 const MAP = [
-  { label:'Home', items:[['home','Overview']] },
   { label:'About', items:[['about','Overview'],['about-story','Our Story'],['about-board','Board / Team'],['about-schools','Participating schools'],['about-partners','Partners']] },
   { label:'Programs', items:[['programs','Overview'],['prog-create','Create Success'],['prog-college','College Bound'],['prog-future','Future Safe'],['prog-smash','SMASH'],['prog-enroll','Enroll']] },
   { label:'Get Involved', items:[['getinvolved','Overview'],['gi-volunteer','Volunteer'],['gi-events','Events'],['gi-upcoming','Upcoming Events'],['gi-past','Past Events']] },
@@ -616,6 +615,8 @@ topBtn.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" st
 document.body.appendChild(topBtn);
 topBtn.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
 window.addEventListener('scroll', ()=> topBtn.classList.toggle('show', window.scrollY>300), {passive:true});
+
+document.getElementById('siteLogo').addEventListener('click', ()=>{ show('home'); window.scrollTo({top:0,behavior:'smooth'}); });
 
 show('home');
 
