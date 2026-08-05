@@ -538,8 +538,12 @@ const SCREENS = {
 
   'prog-enroll': { tab:'programs', url:'/programs/enroll', title:'Enroll', html:
     phero('Enroll', L1)
-    + band(`<h2>Choose a program</h2><p class="lead" style="margin:0 auto">${L1}</p>`, 'center')
-    + band(`<div class="grid g4">${['Create Success','College Bound','Future Safe','SMASH'].map((n,i)=>`<div class="pcard">${img(140,'Image')}<div class="pcard-b"><h3 style="font-size:15px">${n}</h3><div class="btnrow">${jump(['prog-create','prog-college','prog-future','prog-smash'][i],'Learn more','sm')}</div></div></div>`).join('')}</div>`, 'grey') },
+    + band(`<div class="grid g4">${[
+        ['Create Success','prog-create','prog-form'],
+        ['College Bound','prog-college','prog-form'],
+        ['Future Safe','prog-future','prog-resources'],
+        ['SMASH','prog-smash','prog-form']
+      ].map(([n,id,anchor])=>`<div class="pcard">${img(140,'Image')}<div class="pcard-b"><h3 style="font-size:15px">${n}</h3><div class="btnrow"><a class="btn sm solid" data-go="${id}" data-anchor="${anchor}">Enroll</a></div></div></div>`).join('')}</div>`, 'grey') },
 
   'getinvolved': { tab:'getinvolved', url:'/get-involved', title:'Get Involved', html:
     hero('','Get involved', L1, jump('gi-volunteer','Volunteer','onhero')+jump('gi-events','See events','ghost'))
@@ -674,7 +678,7 @@ function closeBio(){ bioModal.classList.remove('open'); }
 document.addEventListener('click', e=>{
   if(e.target.closest('.modal-x') || e.target===bioModal){ closeBio(); return; }
   if(e.target.closest('.headshot')){ bioModal.classList.add('open'); return; }
-  const el=e.target.closest('[data-go]'); if(el){ e.preventDefault(); show(el.dataset.go); }
+  const el=e.target.closest('[data-go]'); if(el){ e.preventDefault(); show(el.dataset.go); if(el.dataset.anchor){ const t=document.getElementById(el.dataset.anchor); if(t) setTimeout(()=>t.scrollIntoView({behavior:'smooth',block:'start'}),50); } }
 });
 document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeBio(); });
 
