@@ -546,7 +546,7 @@ const SCREENS = {
       ].map(([n,id,anchor,lbl])=>`<div class="pcard">${img(140,'Image')}<div class="pcard-b"><h3 style="font-size:15px">${n}</h3><div class="btnrow"><a class="btn sm solid" data-go="${id}" data-anchor="${anchor}">${lbl||'Enroll'}</a></div></div></div>`).join('')}</div>`, 'grey') },
 
   'getinvolved': { tab:'getinvolved', url:'/get-involved', title:'Get Involved', html:
-    hero('','Get involved headline', L1, '')
+    hero('','Get involved headline', L1, jump('gi-volunteer','Volunteer','onhero')+jump('gi-events','See events','ghost')+jump('donate','Donate','ghost'))
     + band(`<h2 style="margin-bottom:28px">Ways to get involved</h2><div class="grid g3">
         <div class="pcard">${img(200,'Volunteer photo')}<div class="pcard-b"><h3>Volunteer</h3><p>${L2}</p><div class="btnrow">${jump('gi-volunteer','Learn more','solid sm')}</div></div></div>
         <div class="pcard">${img(200,'Events photo')}<div class="pcard-b"><h3>Events</h3><p>${L2}</p><div class="btnrow">${jump('gi-events','Learn more','solid sm')}</div></div></div>
@@ -556,7 +556,21 @@ const SCREENS = {
   'gi-volunteer': { tab:'getinvolved', url:'/get-involved/volunteer', title:'Volunteer', html:
     phero('Volunteer', L1)
     + feature('','Volunteer headline', L2, '', 'Volunteer photo', false, '')
-    + band(`<h2 style="margin-bottom:26px">Volunteer roles</h2><div class="grid g3">${Array(3).fill(0).map(()=>`<div class="pcard"><div class="pcard-b"><h3>Role title</h3><p>${L2}</p></div></div>`).join('')}</div>`, 'grey')
+    + band(`<h2 style="margin-bottom:26px">Volunteer roles</h2><div class="prog-accordion vol-accordion">${[
+        ['Tutor / Mentor','Direct service'],
+        ['Program Support','Program support'],
+        ['Administrative','Operations']
+      ].map(([role,tag])=>`
+        <div class="prog-row">
+          <button class="prog-trigger" aria-expanded="false">
+            <h3>${role}</h3>
+            <span class="prog-tag">${tag}</span>
+            <span class="prog-icon">+</span>
+          </button>
+          <div class="prog-panel" style="grid-template-columns:1fr">
+            <div><p>${L2}</p><div class="btnrow" style="margin-top:18px"><span class="btn solid sm">Apply</span></div></div>
+          </div>
+        </div>`).join('')}</div>`, 'grey')
     + testimonials('')
     + band(`<h2 style="margin-bottom:24px;text-align:center">Apply to volunteer</h2>
         <div class="formcard"><div class="frow"><div class="field"><label>Name</label><div class="inp"></div></div><div class="field"><label>Email</label><div class="inp"></div></div></div>
