@@ -355,37 +355,37 @@ function phero(title,sub){ return `<section class="hero short"><div class="hero-
 
 function feature(ey,title,body,ctas,imgLabel,flip,cls){
   const im = `<div>${img(300,imgLabel||'Image')}</div>`;
-  const tx = `<div>${ey?eyebrow(ey):''}<h2>${title}</h2><p>${body}</p>${ctas?`<div class="btnrow" style="margin-top:20px">${ctas}</div>`:''}</div>`;
+  const tx = `<div><h2>${title}</h2><p>${body}</p>${ctas?`<div class="btnrow" style="margin-top:20px">${ctas}</div>`:''}</div>`;
   return `<section class="band ${cls||''}"><div class="wrap"><div class="feature">${flip?tx+im:im+tx}</div></div></section>`;
 }
 function statband(ey,title,stats){ return `<section class="band dark"><div class="wrap center">${ey?eyebrow(ey,true):''}${title?`<h2>${title}</h2>`:''}<div class="stats">${stats.map(([n,l])=>`<div class="stat"><b>${n}</b><span>${l}</span></div>`).join('')}</div></div></section>`; }
 function ctaband(title,ctas){ return `<section class="band dark"><div class="wrap center"><h2>${title}</h2><div class="btnrow center" style="margin-top:8px">${ctas}</div></div></section>`; }
-function nextaction(links){ return band(`${eyebrow('Next best action')}<div class="btnrow center">${links}</div>`, 'grey center'); }
-function testimonials(cls){ return band(`${eyebrow('Voices from our community')}<h2 style="margin-bottom:30px">Meet the community</h2><div class="grid g3">${Array(3).fill(0).map(()=>`<div class="tcard"><p>"${L2}"</p><div class="tperson"><div class="avatar"></div><div><div class="n">Community member</div><div class="r">Program participant</div></div></div></div>`).join('')}</div>`, cls||''); }
+function nextaction(links){ return band(`<div class="btnrow center">${links}</div>`, 'grey center'); }
+function testimonials(cls){ return band(`<h2 style="margin-bottom:30px">Community voices</h2><div class="grid g3">${Array(3).fill(0).map(()=>`<div class="tcard"><p>"${L2}"</p><div class="tperson"><div class="avatar"></div><div><div class="n">Community member</div><div class="r">Program participant</div></div></div></div>`).join('')}</div>`, cls||''); }
 
 function programPage(name, tagline, opts){
   opts = opts || {};
   const overviewNote = opts.overviewNote ? `<span class="note">${opts.overviewNote}</span>` : '';
   let out = phero(name, tagline);
-  out += feature('Program overview', `About ${name} ${overviewNote}`, L3, jump('prog-enroll','Enroll now','solid sm'), 'Program photo', false, '');
-  out += band(`${eyebrow('Who it\'s for')}<h2>Eligibility requirements</h2><p class="lead">${L2}</p>`, 'grey');
+  out += feature('', `About ${name} ${overviewNote}`, L3, jump('prog-enroll','Enroll now','solid sm'), 'Program photo', false, '');
+  out += band(`<h2>Eligibility requirements</h2><p class="lead">${L2}</p>`, 'grey');
   if(opts.mode !== 'access'){
-    out += band(`${eyebrow('The details')}<h2 style="margin-bottom:26px">Enrollment details</h2><div class="grid g3">
+    out += band(`<h2 style="margin-bottom:26px">Enrollment details</h2><div class="grid g3">
       <div class="pcard"><div class="pcard-b"><div class="eyebrow">Location</div><p>${L1}</p></div></div>
       <div class="pcard"><div class="pcard-b"><div class="eyebrow">Cost</div><p>${L1}</p></div></div>
       <div class="pcard"><div class="pcard-b"><div class="eyebrow">Dates</div><p>${L1}</p></div></div></div>`, '');
   } else {
-    out += band(`${eyebrow('The details')}<h2>Access resources</h2><p class="lead" style="margin-bottom:20px">${L2}</p><div class="btnrow"><a class="btn solid" href="https://www.dropbox.com" target="_blank" rel="noopener">Access resources</a></div>`, '');
+    out += band(`<h2>Access resources</h2><p class="lead" style="margin-bottom:20px">${L2}</p><div class="btnrow"><a class="btn solid" href="https://www.dropbox.com" target="_blank" rel="noopener">Access resources</a></div>`, '');
   }
   if(opts.form){
     const grey = (opts.mode==='access') ? 'grey' : 'grey';
-    out += band(`${eyebrow('Sign up')}<h2 style="margin-bottom:24px">${name} enrollment form</h2>
+    out += band(`<h2 style="margin-bottom:24px">${name} enrollment form</h2>
       <div class="formcard"><div class="frow"><div class="field"><label>Student name</label><div class="inp"></div></div><div class="field"><label>Grade</label><div class="inp"></div></div></div>
       <div class="field"><label>Parent / guardian email</label><div class="inp"></div></div>
       <div class="field"><label>Notes</label><div class="inp area"></div></div>
       <div class="btnrow"><span class="btn solid">Submit enrollment</span></div></div>`, grey);
   }
-  out += ctaband('Want to help this program thrive?', jump('gi-volunteer','Volunteer with us','onhero'));
+  out += ctaband('CTA headline', jump('gi-volunteer','Volunteer with us','onhero'));
   out += testimonials(opts.form ? '' : 'grey');
   return out;
 }
@@ -401,14 +401,14 @@ function donateWidget(){ return `<div class="donate-widget">
 
 function donateHero(){ return `<section class="hero"><div class="hero-img">${ICON}<span>Hero image</span></div>
   <div class="hero-overlay" style="justify-content:space-between;gap:44px">
-    <div class="hero-box" style="max-width:460px">${eyebrow('Support our work',true)}<h1>Every gift makes a difference</h1><p>Your donation opens doors for kids in Sunset Park.</p></div>
+    <div class="hero-box" style="max-width:460px"><h1>Donate headline</h1><p>${L1}</p></div>
     ${donateWidget()}
   </div></section>`; }
 
 /* ---------- SCREENS ---------- */
 const SCREENS = {
   'home': { tab:'home', url:'/', title:'Home', html:
-    hero('Our mission','Mission statement', L1,
+    hero('','Mission statement', L1,
       jump('donate','Donate','onhero')+jump('getinvolved','Get involved','ghost'))
     + `<section class="band"><div class="wrap"><div class="feature">
         <div>${img(300,'Photo')}</div>
@@ -450,8 +450,8 @@ const SCREENS = {
             <span class="btn solid sm" id="sort-go" style="margin-left:6px">Go</span>
           </div>
         </div>`, 'grey center')
-    + feature('The challenge','There is a wealth gap in the Sunset Park community', L2, jump('about','Learn more','solid sm'), 'Community photo', true, '')
-    + statband('Our impact','CotC provides access to education resources for kids and families',[['XX','Kids served'],['XX','Went to college'],['XX','Workshops held']])
+    + feature('','Challenge headline', L2, jump('about','Learn more','solid sm'), 'Community photo', true, '')
+    + statband('','Impact statement',[['XX','Kids served'],['XX','Went to college'],['XX','Workshops held']])
     + band(`<h2 style="margin-bottom:28px">Get involved</h2><div class="grid g3">
         <div class="pcard">${img(150,'Photo')}<div class="pcard-b"><h3>Donate</h3><p>${L1}</p><div class="btnrow">${jump('donate','Donate','solid sm')}</div></div></div>
         <div class="pcard">${img(150,'Photo')}<div class="pcard-b"><h3>Volunteer</h3><p>${L1}</p><div class="btnrow">${jump('gi-volunteer','Volunteer','sm')}</div></div></div>
@@ -459,9 +459,9 @@ const SCREENS = {
       </div>`, 'grey') },
 
   'about': { tab:'about', url:'/about', title:'About', html:
-    phero('About Children of the City','Restating who we are and the community we serve.')
-    + feature('Our mission','Closing the wealth gap, one child at a time', L2, '', 'Mission photo', false, '')
-    + feature('Who we help','Serving the families of Sunset Park', L2,
+    phero('About Children of the City', L1)
+    + feature('','Mission headline', L2, '', 'Mission photo', false, '')
+    + feature('','Who we help headline', L2,
         `<div class="mini-stats">
           <div class="mini-stat"><b>XX%</b><span>of Sunset Park families experiencing economic hardship</span></div>
           <div class="mini-stat"><b>XX%</b><span>of students facing barriers to educational opportunity</span></div>
@@ -472,66 +472,66 @@ const SCREENS = {
 
   'about-story': { tab:'about', url:'/about/our-story', title:'Our Story', html:
     phero('Our Story')
-    + feature('Where it began','A note from our founder', L3, '', 'Founder portrait', false, '')
+    + feature('','Founder headline', L3, '', 'Founder portrait', false, '')
     + nextaction(jump('getinvolved','Join us','solid')+jump('about-board','Meet the team','')) },
 
   'about-board': { tab:'about', url:'/about/board-team', title:'Board / Team', html:
     phero('Board & Team')
-    + band(`${eyebrow('The people behind the work')}<h2>Meet the team</h2><p class="lead">${L1}</p>`, '')
+    + band(`<h2>Meet the team</h2><p class="lead">${L1}</p>`, '')
     + band(`<div class="grid g4">${Array(8).fill(0).map(()=>`<div class="headshot" data-bio="1">${img(150,'Headshot')}<div class="n">Full Name</div><div class="r">Title / Role</div><div class="viewbio">View bio →</div></div>`).join('')}</div>`, 'grey')
-    + ctaband('Want to get involved?', jump('getinvolved','Join us','onhero')+jump('about-partners','Meet our partners','ghost')) },
+    + ctaband('CTA headline', jump('getinvolved','Join us','onhero')+jump('about-partners','Meet our partners','ghost')) },
 
   'about-schools': { tab:'about', url:'/about/schools', title:'Participating Schools', html:
     phero('Participating Schools')
-    + band(`${eyebrow('Where we work')}<h2>Our schools</h2><p class="lead">${L1}</p>`, '')
+    + band(`<h2>Our schools</h2><p class="lead">${L1}</p>`, '')
     + band(`<div class="grid g2">${Array(6).fill(0).map(()=>`<div class="row"><div class="img">${ICON}</div><div class="grow"><h3>School name</h3><div class="meta">Contact info placeholder</div></div></div>`).join('')}</div>`, 'grey')
     + band(`<div class="btnrow center">${jump('getinvolved','Join us','solid')}</div>`, 'grey center') },
 
   'about-partners': { tab:'about', url:'/about/partners', title:'Partners', html:
     phero('Our Partners')
-    + band(`${eyebrow('Stronger together')}<h2>Our partners</h2><p class="lead">${L1}</p>`, '')
+    + band(`<h2>Our partners</h2><p class="lead">${L1}</p>`, '')
     + band(`<div class="grid g4">${Array(8).fill(0).map(()=>img(100,'Logo')).join('')}</div>`, 'grey')
     + band(`<div class="btnrow center">${jump('getinvolved','Join us','solid')}</div>`, 'grey center') },
 
   'programs': { tab:'programs', url:'/programs', title:'Programs', html:
-    phero('Our Programs','Education, mentorship, and support for kids and families.')
-    + band(`${eyebrow('What we offer')}<h2>Programs built around the community</h2><p class="lead" style="margin:0 auto">${L2}</p>`, 'center')
+    phero('Our Programs', L1)
+    + band(`<h2>Our programs</h2><p class="lead" style="margin:0 auto">${L2}</p>`, 'center')
     + band(`<div class="grid g2">${[
-        ['Create Success','After school and summer programs for grades 1-12','prog-create'],
-        ['College Bound','College prep for high school students','prog-college'],
-        ['Future Safe','Food and supplies for households in the community','prog-future'],
-        ['SMASH','Workshops, mentorship, and advocacy for parents and caretakers','prog-smash']
+        ['Create Success', L1,'prog-create'],
+        ['College Bound', L1,'prog-college'],
+        ['Future Safe', L1,'prog-future'],
+        ['SMASH', L1,'prog-smash']
       ].map(p=>`<div class="pcard">${img(190,'Program image')}<div class="pcard-b"><h3>${p[0]}</h3><p>${p[1]}</p><div class="btnrow">${jump(p[2],'Learn more','sm')}</div></div></div>`).join('')}</div>`, 'grey') },
 
-  'prog-create': { tab:'programs', url:'/programs/create-success', title:'Create Success', html: programPage('Create Success','After school and summer programs for grades 1-12', {form:true}) },
-  'prog-college': { tab:'programs', url:'/programs/college-bound', title:'College Bound', html: programPage('College Bound','College prep for high school students', {form:false}) },
-  'prog-future': { tab:'programs', url:'/programs/future-safe', title:'Future Safe', html: programPage('Future Safe','Food and supplies for households in the community', {mode:'access', form:false}) },
-  'prog-smash': { tab:'programs', url:'/programs/smash', title:'SMASH', html: programPage('SMASH','Workshops, mentorship, and advocacy for parents and caretakers', {form:true}) },
+  'prog-create': { tab:'programs', url:'/programs/create-success', title:'Create Success', html: programPage('Create Success', L1, {form:true}) },
+  'prog-college': { tab:'programs', url:'/programs/college-bound', title:'College Bound', html: programPage('College Bound', L1, {form:false}) },
+  'prog-future': { tab:'programs', url:'/programs/future-safe', title:'Future Safe', html: programPage('Future Safe', L1, {mode:'access', form:false}) },
+  'prog-smash': { tab:'programs', url:'/programs/smash', title:'SMASH', html: programPage('SMASH', L1, {form:true}) },
 
   'prog-enroll': { tab:'programs', url:'/programs/enroll', title:'Enroll', html:
-    phero('Enroll','Learn more about our programs to enroll.')
-    + band(`${eyebrow('Get started')}<h2>Choose a program</h2><p class="lead" style="margin:0 auto">${L1}</p>`, 'center')
+    phero('Enroll', L1)
+    + band(`<h2>Choose a program</h2><p class="lead" style="margin:0 auto">${L1}</p>`, 'center')
     + band(`<div class="grid g4">${['Create Success','College Bound','Future Safe','SMASH'].map((n,i)=>`<div class="pcard">${img(140,'Image')}<div class="pcard-b"><h3 style="font-size:15px">${n}</h3><div class="btnrow">${jump(['prog-create','prog-college','prog-future','prog-smash'][i],'Learn more','sm')}</div></div></div>`).join('')}</div>`, 'grey') },
 
   'getinvolved': { tab:'getinvolved', url:'/get-involved', title:'Get Involved', html:
-    hero('Get involved','Join the movement','Volunteer your time or bring an event to life.', jump('gi-volunteer','Volunteer','onhero')+jump('gi-events','See events','ghost'))
-    + band(`${eyebrow('Ways to help')}<h2 style="margin-bottom:28px">Find the right fit</h2><div class="grid g2">
+    hero('','Get involved', L1, jump('gi-volunteer','Volunteer','onhero')+jump('gi-events','See events','ghost'))
+    + band(`<h2 style="margin-bottom:28px">Ways to get involved</h2><div class="grid g2">
         <div class="pcard">${img(200,'Volunteer photo')}<div class="pcard-b"><h3>Volunteer</h3><p>${L2}</p><div class="btnrow">${jump('gi-volunteer','Learn more','solid sm')}</div></div></div>
         <div class="pcard">${img(200,'Events photo')}<div class="pcard-b"><h3>Events</h3><p>${L2}</p><div class="btnrow">${jump('gi-events','Learn more','solid sm')}</div></div></div>
       </div>`, '') },
 
   'gi-volunteer': { tab:'getinvolved', url:'/get-involved/volunteer', title:'Volunteer', html:
-    phero('Volunteer','Give your time. Change a life.')
-    + feature('Why volunteer','Be part of the work', L2, '', 'Volunteer photo', false, '')
-    + band(`${eyebrow('Opportunities')}<h2 style="margin-bottom:26px">Volunteer roles</h2><div class="grid g3">${Array(3).fill(0).map(()=>`<div class="pcard"><div class="pcard-b"><h3>Role title</h3><p>${L2}</p></div></div>`).join('')}</div>`, 'grey')
+    phero('Volunteer', L1)
+    + feature('','Volunteer headline', L2, '', 'Volunteer photo', false, '')
+    + band(`<h2 style="margin-bottom:26px">Volunteer roles</h2><div class="grid g3">${Array(3).fill(0).map(()=>`<div class="pcard"><div class="pcard-b"><h3>Role title</h3><p>${L2}</p></div></div>`).join('')}</div>`, 'grey')
     + testimonials('')
-    + band(`${eyebrow('Ready to start')}<h2 style="margin-bottom:24px;text-align:center">Apply to volunteer</h2>
+    + band(`<h2 style="margin-bottom:24px;text-align:center">Apply to volunteer</h2>
         <div class="formcard"><div class="frow"><div class="field"><label>Name</label><div class="inp"></div></div><div class="field"><label>Email</label><div class="inp"></div></div></div>
         <div class="field"><label>How would you like to help?</label><div class="inp area"></div></div>
         <div class="btnrow"><span class="btn solid">Submit</span></div></div>`, 'grey') },
 
   'gi-events': { tab:'getinvolved', url:'/get-involved/events', title:'Events', html:
-    phero('Events','Bringing the community together.')
+    phero('Events', L1)
     + band(`<div class="grid g2">
         <div class="pcard">${img(190,'Photo')}<div class="pcard-b"><h3>Upcoming events</h3><p>${L1}</p><div class="btnrow">${jump('gi-upcoming','See what\'s coming','solid sm')}</div></div></div>
         <div class="pcard">${img(190,'Photo')}<div class="pcard-b"><h3>Past events</h3><p>${L1}</p><div class="btnrow">${jump('gi-past','View the gallery','sm')}</div></div></div>
@@ -539,18 +539,18 @@ const SCREENS = {
 
   'gi-upcoming': { tab:'getinvolved', url:'/get-involved/events/upcoming', title:'Upcoming Events', html:
     phero('Upcoming Events')
-    + band(`<a class="backbtn" data-go="gi-events">← Back to Events</a>${eyebrow('Mark your calendar')}<h2 style="margin-bottom:26px">What\'s coming up</h2>${Array(3).fill(0).map(()=>`<div class="row"><div class="img">${ICON}</div><div class="grow"><h3>Event name / type</h3><div class="meta">Date placeholder · Location</div></div><div class="btnrow"><span class="btn sm solid">Give</span><span class="btn sm">Volunteer</span></div></div>`).join('')}`, '') },
+    + band(`<a class="backbtn" data-go="gi-events">← Back to Events</a><h2 style="margin-bottom:26px">Upcoming events</h2>${Array(3).fill(0).map(()=>`<div class="row"><div class="img">${ICON}</div><div class="grow"><h3>Event name / type</h3><div class="meta">Date placeholder · Location</div></div><div class="btnrow"><span class="btn sm solid">Give</span><span class="btn sm">Volunteer</span></div></div>`).join('')}`, '') },
 
   'gi-past': { tab:'getinvolved', url:'/get-involved/events/past', title:'Past Events', html:
     phero('Past Events')
-    + band(`${eyebrow('Looking back')}<h2 style="margin-bottom:26px">Past events gallery</h2><div class="grid g3">${Array(6).fill(0).map(()=>`<div class="pcard">${img(170,'Event photo')}<div class="pcard-b"><h3 style="font-size:16px">Event name / type</h3><p>Success metrics</p></div></div>`).join('')}</div>`, 'grey')
-    + statband('With gratitude','Thank you to our partners & donors',[['XX','Events held'],['XX','Attendees'],['XX','Volunteers']]) },
+    + band(`<h2 style="margin-bottom:26px">Past events</h2><div class="grid g3">${Array(6).fill(0).map(()=>`<div class="pcard">${img(170,'Event photo')}<div class="pcard-b"><h3 style="font-size:16px">Event name / type</h3><p>Success metrics</p></div></div>`).join('')}</div>`, 'grey')
+    + statband('','Gratitude statement',[['XX','Events held'],['XX','Attendees'],['XX','Volunteers']]) },
 
   'donate': { tab:'donate', url:'/donate', title:'Donate', html:
     donateHero()
-    + feature('More ways to give','Mail a check, give stock, or set up employer matching', L2, '', 'Community photo', false, '')
-    + statband('Reason to believe','When you give, XX% of your donation goes to XX',[['XX','Kids served'],['XX','Kids went to college'],['XX','Workshops held']])
-    + band(`${eyebrow('Social proof')}<h2 style="margin-bottom:26px;text-align:center">Thanks to our partners & donors</h2><div class="grid g4">${Array(4).fill(0).map(()=>img(90,'Logo')).join('')}</div>`, 'grey')
+    + feature('','Ways to give headline', L2, '', 'Community photo', false, '')
+    + statband('','Impact statement',[['XX','Kids served'],['XX','Kids went to college'],['XX','Workshops held']])
+    + band(`<h2 style="margin-bottom:26px;text-align:center">Our partners & donors</h2><div class="grid g4">${Array(4).fill(0).map(()=>img(90,'Logo')).join('')}</div>`, 'grey')
     + testimonials('') },
 };
 
