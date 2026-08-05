@@ -213,6 +213,11 @@
   .pill { display: inline-block; background: #f0f0f1; border: 1px solid #d6d6d8; border-radius: 4px; padding: 6px 30px 6px 14px; color: #777; font-size: 15px; position: relative; }
   .pill::after { content: "▾"; position: absolute; right: 10px; color: #aaa; }
   .pill-sel { appearance: none; -webkit-appearance: none; background: #f0f0f1 url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="6"><path d="M0 0l5 6 5-6z" fill="%23aaa"/></svg>') no-repeat right 10px center; border: 1px solid #d6d6d8; border-radius: 4px; padding: 6px 30px 6px 14px; color: #555; font-size: inherit; font-family: inherit; cursor: pointer; }
+  /* who-we-help inline stats */
+  .mini-stats { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+  .mini-stat { display: flex; align-items: baseline; gap: 12px; }
+  .mini-stat b { font-size: 26px; font-weight: 800; color: var(--brand); white-space: nowrap; flex: none; }
+  .mini-stat span { font-size: 14px; color: var(--mut); line-height: 1.4; }
   /* paypal widget */
   .paypal-widget { margin-top: 20px; }
   .amt-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
@@ -456,8 +461,14 @@ const SCREENS = {
   'about': { tab:'about', url:'/about', title:'About', html:
     phero('About Children of the City','Restating who we are and the community we serve.')
     + feature('Our mission','Closing the wealth gap, one child at a time', L2, '', 'Mission photo', false, '')
-    + feature('Who we help','Serving the families of Sunset Park', L2, '', 'Community photo', true, 'grey')
-    + band(`${eyebrow('How we work')}<h2>A high-level look at our approach</h2><p class="lead">${L2}</p><div class="btnrow" style="margin-top:20px">${jump('programs','Learn more about our programs','solid')}</div>`, '') },
+    + feature('Who we help','Serving the families of Sunset Park', L2,
+        `<div class="mini-stats">
+          <div class="mini-stat"><b>XX%</b><span>of Sunset Park families experiencing economic hardship</span></div>
+          <div class="mini-stat"><b>XX%</b><span>of students facing barriers to educational opportunity</span></div>
+          <div class="mini-stat"><b>XX%</b><span>of children lacking access to essential resources needed to succeed</span></div>
+        </div>`,
+        'Community photo', true, 'grey')
+    + band(`<h2>How we work</h2><p class="lead">${L2}</p><div class="btnrow" style="margin-top:20px">${jump('programs','Learn more','solid')}</div>`, '') },
 
   'about-story': { tab:'about', url:'/about/our-story', title:'Our Story', html:
     phero('Our Story')
@@ -474,13 +485,13 @@ const SCREENS = {
     phero('Participating Schools')
     + band(`${eyebrow('Where we work')}<h2>Our schools</h2><p class="lead">${L1}</p>`, '')
     + band(`<div class="grid g2">${Array(6).fill(0).map(()=>`<div class="row"><div class="img">${ICON}</div><div class="grow"><h3>School name</h3><div class="meta">Contact info placeholder</div></div></div>`).join('')}</div>`, 'grey')
-    + nextaction(jump('getinvolved','Join us','solid')) },
+    + band(`<div class="btnrow center">${jump('getinvolved','Join us','solid')}</div>`, 'grey center') },
 
   'about-partners': { tab:'about', url:'/about/partners', title:'Partners', html:
     phero('Our Partners')
     + band(`${eyebrow('Stronger together')}<h2>Our partners</h2><p class="lead">${L1}</p>`, '')
     + band(`<div class="grid g4">${Array(8).fill(0).map(()=>img(100,'Logo')).join('')}</div>`, 'grey')
-    + nextaction(jump('getinvolved','Join us','solid')) },
+    + band(`<div class="btnrow center">${jump('getinvolved','Join us','solid')}</div>`, 'grey center') },
 
   'programs': { tab:'programs', url:'/programs', title:'Programs', html:
     phero('Our Programs','Education, mentorship, and support for kids and families.')
