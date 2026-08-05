@@ -512,7 +512,7 @@ const MAP = [
 const DROPDOWNS = {
   about: [['about-story','Our Story'],['about-board','Board / Team'],['about-schools','Participating Schools'],['about-partners','Partners']],
   programs: [['prog-create','Create Success'],['prog-college','College Bound'],['prog-future','Future Safe'],['prog-smash','SMASH'],['prog-enroll','Enroll']],
-  getinvolved: [['gi-volunteer','Volunteer'],['gi-events','Events'],['gi-upcoming','Upcoming Events',1],['gi-past','Past Events',1]],
+  getinvolved: [['gi-volunteer','Volunteer'],['gi-events','Events'],['gi-upcoming','Upcoming Events',1],['gi-past','Past Events',1],['donate','Donate']],
 };
 const LABELS = {}; MAP.forEach(g=>g.items.forEach(([id,label])=>{ LABELS[id]=label; }));
 const TAB_PAGES = {}; Object.entries(SCREENS).forEach(([id,s])=>{ (TAB_PAGES[s.tab]=TAB_PAGES[s.tab]||[]).push([id, LABELS[id]||id]); });
