@@ -581,17 +581,19 @@ const SCREENS = {
     phero('Events', L1)
     + band(`<div class="grid g2">
         <div class="pcard">${img(190,'Photo')}<div class="pcard-b"><h3>Upcoming events</h3><p>${L1}</p><div class="btnrow">${jump('gi-upcoming','See what\'s coming','solid sm')}</div></div></div>
-        <div class="pcard">${img(190,'Photo')}<div class="pcard-b"><h3>Past events</h3><p>${L1}</p><div class="btnrow">${jump('gi-past','View the gallery','sm')}</div></div></div>
+        <div class="pcard">${img(190,'Photo')}<div class="pcard-b"><h3>Past events</h3><p>${L1}</p><div class="btnrow">${jump('gi-past','See impact','sm')}</div></div></div>
       </div>`, '') },
 
   'gi-upcoming': { tab:'getinvolved', url:'/get-involved/events/upcoming', title:'Upcoming Events', html:
     phero('Upcoming Events')
-    + band(`<a class="backbtn" data-go="gi-events">← Back to Events</a><h2 style="margin-bottom:26px">Upcoming events</h2>${Array(3).fill(0).map(()=>`<div class="row"><div class="img">${ICON}</div><div class="grow"><h3>Event name / type</h3><div class="meta">Date placeholder · Location</div></div><div class="btnrow"><span class="btn sm solid">Give</span><span class="btn sm">Volunteer</span></div></div>`).join('')}`, '') },
+    + band(`<a class="backbtn" data-go="gi-events">← Back to Events</a><h2 style="margin-bottom:26px">Upcoming events</h2>${Array(3).fill(0).map(()=>`<div class="row"><div class="img">${ICON}</div><div class="grow"><h3>Event name / type</h3><div class="meta">Date placeholder · Location</div></div><div class="btnrow"><span class="btn sm solid">Join us</span><span class="btn sm">Volunteer</span></div></div>`).join('')}`, '')
+    + nextaction(jump('gi-past','See impact of past events','solid')) },
 
   'gi-past': { tab:'getinvolved', url:'/get-involved/events/past', title:'Past Events', html:
     phero('Past Events')
     + band(`<h2 style="margin-bottom:26px">Past events</h2><div class="grid g3">${Array(6).fill(0).map(()=>`<div class="pcard">${img(170,'Event photo')}<div class="pcard-b"><h3 style="font-size:16px">Event name / type</h3><p>Success metrics</p></div></div>`).join('')}</div>`, 'grey')
-    + statband('','Gratitude statement',[['XX','Events held'],['XX','Attendees'],['XX','Volunteers']]) },
+    + statband('','Gratitude statement',[['XX','Events held'],['XX','Attendees'],['XX','Volunteers']])
+    + nextaction(jump('gi-upcoming','Join us at an upcoming event','solid')) },
 
   'donate': { tab:'donate', url:'/donate', title:'Donate', html:
     donateHero()
