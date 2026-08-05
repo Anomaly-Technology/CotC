@@ -541,9 +541,9 @@ const SCREENS = {
     + band(`<div class="grid g4">${[
         ['Create Success','prog-create','prog-form'],
         ['College Bound','prog-college','prog-form'],
-        ['Future Safe','prog-future','prog-resources'],
+        ['Future Safe','prog-future','prog-resources','Access resources'],
         ['SMASH','prog-smash','prog-form']
-      ].map(([n,id,anchor])=>`<div class="pcard">${img(140,'Image')}<div class="pcard-b"><h3 style="font-size:15px">${n}</h3><div class="btnrow"><a class="btn sm solid" data-go="${id}" data-anchor="${anchor}">Enroll</a></div></div></div>`).join('')}</div>`, 'grey') },
+      ].map(([n,id,anchor,lbl])=>`<div class="pcard">${img(140,'Image')}<div class="pcard-b"><h3 style="font-size:15px">${n}</h3><div class="btnrow"><a class="btn sm solid" data-go="${id}" data-anchor="${anchor}">${lbl||'Enroll'}</a></div></div></div>`).join('')}</div>`, 'grey') },
 
   'getinvolved': { tab:'getinvolved', url:'/get-involved', title:'Get Involved', html:
     hero('','Get involved', L1, jump('gi-volunteer','Volunteer','onhero')+jump('gi-events','See events','ghost'))
