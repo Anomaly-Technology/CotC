@@ -379,7 +379,8 @@ function programPage(name, tagline, opts){
   opts = opts || {};
   const overviewNote = opts.overviewNote ? `<span class="note">${opts.overviewNote}</span>` : '';
   let out = phero(name, tagline);
-  out += feature('', `About ${name} ${overviewNote}`, L3, jump('prog-enroll','Enroll now','solid sm'), 'Program photo', false, '');
+  const enrollCta = opts.form ? `<a class="btn solid sm" href="#prog-form">Enroll now</a>` : jump('prog-enroll','Enroll now','solid sm');
+  out += feature('', `About ${name} ${overviewNote}`, L3, enrollCta, 'Program photo', false, '');
   out += band(`<h2>Eligibility requirements</h2><p class="lead">${L2}</p>`, 'grey');
   if(opts.mode !== 'access'){
     out += band(`<h2 style="margin-bottom:26px">Enrollment details</h2><div class="grid g3">
@@ -390,12 +391,11 @@ function programPage(name, tagline, opts){
     out += band(`<h2>Access resources</h2><p class="lead" style="margin-bottom:20px">${L2}</p><div class="btnrow"><a class="btn solid" href="https://www.dropbox.com" target="_blank" rel="noopener">Access resources</a></div>`, '');
   }
   if(opts.form){
-    const grey = (opts.mode==='access') ? 'grey' : 'grey';
-    out += band(`<h2 style="margin-bottom:24px">${name} enrollment form</h2>
+    out += `<section id="prog-form" class="band grey" style="scroll-margin-top:68px"><div class="wrap"><h2 style="margin-bottom:24px">${name} enrollment form</h2>
       <div class="formcard"><div class="frow"><div class="field"><label>Student name</label><div class="inp"></div></div><div class="field"><label>Grade</label><div class="inp"></div></div></div>
       <div class="field"><label>Parent / guardian email</label><div class="inp"></div></div>
       <div class="field"><label>Notes</label><div class="inp area"></div></div>
-      <div class="btnrow"><span class="btn solid">Submit enrollment</span></div></div>`, grey);
+      <div class="btnrow"><span class="btn solid">Submit enrollment</span></div></div></div></section>`;
   }
   out += ctaband('CTA headline', jump('gi-volunteer','Volunteer with us','onhero'));
   out += testimonials(opts.form ? '' : 'grey');
