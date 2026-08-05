@@ -546,10 +546,11 @@ const SCREENS = {
       ].map(([n,id,anchor,lbl])=>`<div class="pcard">${img(140,'Image')}<div class="pcard-b"><h3 style="font-size:15px">${n}</h3><div class="btnrow"><a class="btn sm solid" data-go="${id}" data-anchor="${anchor}">${lbl||'Enroll'}</a></div></div></div>`).join('')}</div>`, 'grey') },
 
   'getinvolved': { tab:'getinvolved', url:'/get-involved', title:'Get Involved', html:
-    hero('','Get involved', L1, jump('gi-volunteer','Volunteer','onhero')+jump('gi-events','See events','ghost'))
-    + band(`<h2 style="margin-bottom:28px">Ways to get involved</h2><div class="grid g2">
+    hero('','Get involved headline', L1, '')
+    + band(`<h2 style="margin-bottom:28px">Ways to get involved</h2><div class="grid g3">
         <div class="pcard">${img(200,'Volunteer photo')}<div class="pcard-b"><h3>Volunteer</h3><p>${L2}</p><div class="btnrow">${jump('gi-volunteer','Learn more','solid sm')}</div></div></div>
         <div class="pcard">${img(200,'Events photo')}<div class="pcard-b"><h3>Events</h3><p>${L2}</p><div class="btnrow">${jump('gi-events','Learn more','solid sm')}</div></div></div>
+        <div class="pcard">${img(200,'Donate photo')}<div class="pcard-b"><h3>Donate</h3><p>${L2}</p><div class="btnrow">${jump('donate','Donate','solid sm')}</div></div></div>
       </div>`, '') },
 
   'gi-volunteer': { tab:'getinvolved', url:'/get-involved/volunteer', title:'Volunteer', html:
