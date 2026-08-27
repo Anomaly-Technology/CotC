@@ -302,6 +302,57 @@
     .sorter .fill { font-size: 16px; }
     #backToTop { bottom: 16px; right: 16px; width: 40px; height: 40px; }
   }
+
+  /* One-URL Figma import mode: ?figma=all */
+  body.figma-all {
+    min-width: 1440px;
+    background: #d9d9d9;
+  }
+  body.figma-all .app { display: block; }
+  body.figma-all .sidebar,
+  body.figma-all .chrome,
+  body.figma-all .browser > header.site,
+  body.figma-all .browser > .crumbs,
+  body.figma-all .browser > footer.site,
+  body.figma-all #backToTop { display: none !important; }
+  body.figma-all .stage {
+    width: 100%;
+    min-width: 0;
+    padding: 64px;
+  }
+  body.figma-all .browser {
+    width: auto;
+    max-width: none;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    overflow: visible;
+    background: transparent;
+  }
+  body.figma-all #screens {
+    display: grid;
+    gap: 80px;
+    justify-content: start;
+  }
+  body.figma-all .screen.figma-frame {
+    display: block;
+    width: 1440px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 8px 30px rgba(0,0,0,.16);
+  }
+  body.figma-all .figma-frame-label {
+    padding: 18px 24px;
+    color: #fff;
+    background: #171717;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: .02em;
+  }
+  body.figma-all .figma-frame > header.site { display: flex; }
+  body.figma-all .figma-frame > .crumbs { display: block; }
+  body.figma-all .figma-frame > .crumbs:empty { display: none; }
+  body.figma-all .figma-frame > footer.site { display: block; }
 </style>
 </head>
 <body>
@@ -768,8 +819,43 @@ window.addEventListener('scroll', ()=> topBtn.classList.toggle('show', window.sc
 
 document.getElementById('siteLogo').addEventListener('click', ()=>{ show('home'); window.scrollTo({top:0,behavior:'smooth'}); });
 
-const initialScreen = Object.keys(SCREENS).find(id => SCREENS[id].url === window.location.pathname) || 'home';
-show(initialScreen);
+const figmaAllMode = new URLSearchParams(window.location.search).get('figma') === 'all';
+
+if(figmaAllMode){
+  document.body.classList.add('figma-all');
+  const headerTemplate = document.querySelector('.browser > header.site');
+  const footerTemplate = document.querySelector('.browser > footer.site');
+
+  Object.entries(SCREENS).forEach(([id, screen])=>{
+    const frame = document.getElementById('screen-'+id);
+    frame.classList.add('figma-frame', 'active');
+
+    const label = document.createElement('div');
+    label.className = 'figma-frame-label';
+    label.textContent = screen.title + '  —  ' + screen.url;
+
+    const frameHeader = headerTemplate.cloneNode(true);
+    frameHeader.removeAttribute('id');
+
+    const frameCrumbs = document.createElement('div');
+    const frameTrail = trail(id);
+    frameCrumbs.className = frameTrail.length > 1 ? 'crumbs show' : 'crumbs';
+    frameCrumbs.innerHTML = frameTrail.length > 1
+      ? '<div class="wrap">'+frameTrail.map((sid,i)=> i===frameTrail.length-1
+          ? `<span class="cur">${SCREENS[sid].title}</span>`
+          : `<span>${SCREENS[sid].title}</span><span class="sep">/</span>`).join('')+'</div>'
+      : '';
+
+    const frameFooter = footerTemplate.cloneNode(true);
+    frame.prepend(frameCrumbs);
+    frame.prepend(frameHeader);
+    frame.prepend(label);
+    frame.appendChild(frameFooter);
+  });
+} else {
+  const initialScreen = Object.keys(SCREENS).find(id => SCREENS[id].url === window.location.pathname) || 'home';
+  show(initialScreen);
+}
 
 /* ---------- client-editable content (loaded from the content API) ---------- */
 (function(){

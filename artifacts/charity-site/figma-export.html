@@ -56,6 +56,34 @@
         font-weight: 700;
       }
 
+      .actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 28px 0 10px;
+      }
+
+      .import-all {
+        display: inline-flex;
+        min-height: 0;
+        padding: 14px 18px;
+        border-color: #202124;
+        color: #fff;
+        background: #202124;
+        font-weight: 700;
+      }
+
+      .import-all:hover,
+      .import-all:focus-visible {
+        border-color: #202124;
+        transform: translateY(-1px);
+      }
+
+      .action-note {
+        font-size: 13px;
+        color: #62666b;
+      }
+
       section {
         margin-top: 36px;
       }
@@ -145,6 +173,13 @@
         <div class="count" id="page-count">18 pages</div>
       </header>
 
+      <div class="actions">
+        <a class="import-all" id="import-all" href="./?figma=all">
+          Open all 18 pages in one export
+        </a>
+        <span class="action-note">Copy this single URL into your Figma importer.</span>
+      </div>
+
       <div id="groups"></div>
 
       <footer>
@@ -200,6 +235,7 @@
         '',
       );
       const groupsElement = document.getElementById('groups');
+      document.getElementById('import-all').href = `${basePath}/?figma=all`;
       const pageCount = groups.reduce(
         (total, group) => total + group.pages.length,
         0,
