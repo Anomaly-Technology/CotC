@@ -768,7 +768,8 @@ window.addEventListener('scroll', ()=> topBtn.classList.toggle('show', window.sc
 
 document.getElementById('siteLogo').addEventListener('click', ()=>{ show('home'); window.scrollTo({top:0,behavior:'smooth'}); });
 
-show('home');
+const initialScreen = Object.keys(SCREENS).find(id => SCREENS[id].url === window.location.pathname) || 'home';
+show(initialScreen);
 
 /* ---------- client-editable content (loaded from the content API) ---------- */
 (function(){

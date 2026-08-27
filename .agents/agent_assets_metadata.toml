@@ -1,0 +1,9 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "OoLEWN5RuxKXd8z7K9mzj"
+uri = "file://exports/children-of-the-city-wireframes.zip"
+type = "unspecified"
+title = "Children of the City — Wireframe PDFs"
+description = "ZIP containing 18 individual, trimmed, single-page PDFs—one for each public wireframe page."
