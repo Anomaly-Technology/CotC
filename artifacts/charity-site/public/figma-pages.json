@@ -1,0 +1,79 @@
+{
+  "project": "Children of the City",
+  "viewport": {
+    "width": 1440,
+    "height": 3000
+  },
+  "pages": [
+    { "name": "Home", "route": "/", "group": "Primary" },
+    { "name": "About", "route": "/about", "group": "Primary" },
+    {
+      "name": "Our Story",
+      "route": "/about/our-story",
+      "group": "About"
+    },
+    {
+      "name": "Board / Team",
+      "route": "/about/board-team",
+      "group": "About"
+    },
+    {
+      "name": "Participating Schools",
+      "route": "/about/schools",
+      "group": "About"
+    },
+    {
+      "name": "Partners",
+      "route": "/about/partners",
+      "group": "About"
+    },
+    { "name": "Programs", "route": "/programs", "group": "Primary" },
+    {
+      "name": "Create Success",
+      "route": "/programs/create-success",
+      "group": "Programs"
+    },
+    {
+      "name": "College Bound",
+      "route": "/programs/college-bound",
+      "group": "Programs"
+    },
+    {
+      "name": "Future Safe",
+      "route": "/programs/future-safe",
+      "group": "Programs"
+    },
+    { "name": "SMASH", "route": "/programs/smash", "group": "Programs" },
+    {
+      "name": "Enroll",
+      "route": "/programs/enroll",
+      "group": "Programs"
+    },
+    {
+      "name": "Get Involved",
+      "route": "/get-involved",
+      "group": "Primary"
+    },
+    {
+      "name": "Volunteer",
+      "route": "/get-involved/volunteer",
+      "group": "Get Involved"
+    },
+    {
+      "name": "Events",
+      "route": "/get-involved/events",
+      "group": "Get Involved"
+    },
+    {
+      "name": "Upcoming Events",
+      "route": "/get-involved/events/upcoming",
+      "group": "Events"
+    },
+    {
+      "name": "Past Events",
+      "route": "/get-involved/events/past",
+      "group": "Events"
+    },
+    { "name": "Donate", "route": "/donate", "group": "Primary" }
+  ]
+}

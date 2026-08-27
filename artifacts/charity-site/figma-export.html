@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Children of the City — Figma Export Hub</title>
+    <style>
+      :root {
+        color: #202124;
+        background: #f4f4f2;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+      }
+
+      main {
+        width: min(1120px, calc(100% - 40px));
+        margin: 0 auto;
+        padding: 56px 0 80px;
+      }
+
+      header {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 24px;
+        margin-bottom: 36px;
+      }
+
+      h1 {
+        margin: 0 0 10px;
+        font-size: clamp(30px, 4vw, 52px);
+        line-height: 1;
+      }
+
+      p {
+        max-width: 720px;
+        margin: 0;
+        color: #62666b;
+        line-height: 1.55;
+      }
+
+      .count {
+        flex: 0 0 auto;
+        padding: 9px 13px;
+        border: 1px solid #c9cbce;
+        border-radius: 999px;
+        background: #fff;
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      section {
+        margin-top: 36px;
+      }
+
+      h2 {
+        margin: 0 0 14px;
+        font-size: 15px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      a {
+        display: block;
+        min-height: 112px;
+        padding: 20px;
+        border: 1px solid #d5d6d8;
+        border-radius: 8px;
+        color: inherit;
+        background: #fff;
+        text-decoration: none;
+        transition:
+          border-color 120ms ease,
+          transform 120ms ease;
+      }
+
+      a:hover,
+      a:focus-visible {
+        border-color: #202124;
+        outline: none;
+        transform: translateY(-2px);
+      }
+
+      strong {
+        display: block;
+        margin-bottom: 12px;
+        font-size: 17px;
+      }
+
+      code {
+        color: #777b80;
+        font-size: 12px;
+        overflow-wrap: anywhere;
+      }
+
+      footer {
+        margin-top: 44px;
+        padding-top: 22px;
+        border-top: 1px solid #d5d6d8;
+        font-size: 13px;
+        color: #62666b;
+      }
+
+      @media (max-width: 760px) {
+        main {
+          width: min(100% - 28px, 1120px);
+          padding-top: 32px;
+        }
+
+        header {
+          align-items: start;
+          flex-direction: column;
+        }
+
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div>
+          <h1>Figma export hub</h1>
+          <p>
+            Every public wireframe page and subpage is listed below. Open each
+            route at a 1440px desktop viewport for consistent Figma capture.
+            The password-protected content dashboard is intentionally excluded.
+          </p>
+        </div>
+        <div class="count" id="page-count">18 pages</div>
+      </header>
+
+      <div id="groups"></div>
+
+      <footer>
+        Route data is also available at
+        <code>public/figma-pages.json</code> for automated export workflows.
+      </footer>
+    </main>
+
+    <script>
+      const groups = [
+        {
+          name: 'Primary',
+          pages: [
+            ['Home', '/'],
+            ['About', '/about'],
+            ['Programs', '/programs'],
+            ['Get Involved', '/get-involved'],
+            ['Donate', '/donate'],
+          ],
+        },
+        {
+          name: 'About subpages',
+          pages: [
+            ['Our Story', '/about/our-story'],
+            ['Board / Team', '/about/board-team'],
+            ['Participating Schools', '/about/schools'],
+            ['Partners', '/about/partners'],
+          ],
+        },
+        {
+          name: 'Program subpages',
+          pages: [
+            ['Create Success', '/programs/create-success'],
+            ['College Bound', '/programs/college-bound'],
+            ['Future Safe', '/programs/future-safe'],
+            ['SMASH', '/programs/smash'],
+            ['Enroll', '/programs/enroll'],
+          ],
+        },
+        {
+          name: 'Get Involved and Events subpages',
+          pages: [
+            ['Volunteer', '/get-involved/volunteer'],
+            ['Events', '/get-involved/events'],
+            ['Upcoming Events', '/get-involved/events/upcoming'],
+            ['Past Events', '/get-involved/events/past'],
+          ],
+        },
+      ];
+
+      const basePath = window.location.pathname.replace(
+        /\/figma-export\.html$/,
+        '',
+      );
+      const groupsElement = document.getElementById('groups');
+      const pageCount = groups.reduce(
+        (total, group) => total + group.pages.length,
+        0,
+      );
+
+      document.getElementById('page-count').textContent =
+        `${pageCount} pages`;
+
+      groupsElement.innerHTML = groups
+        .map(
+          (group) => `
+            <section>
+              <h2>${group.name}</h2>
+              <div class="grid">
+                ${group.pages
+                  .map(
+                    ([title, route]) => `
+                      <a href="${basePath}${route}" target="_blank" rel="noreferrer">
+                        <strong>${title}</strong>
+                        <code>${route}</code>
+                      </a>
+                    `,
+                  )
+                  .join('')}
+              </div>
+            </section>
+          `,
+        )
+        .join('');
+    </script>
+  </body>
+</html>

@@ -67,6 +67,10 @@ export default defineConfig({
       input: {
         main: path.resolve(import.meta.dirname, 'index.html'),
         admin: path.resolve(import.meta.dirname, 'admin.html'),
+        figmaExport: path.resolve(
+          import.meta.dirname,
+          'figma-export.html',
+        ),
       },
     },
   },
